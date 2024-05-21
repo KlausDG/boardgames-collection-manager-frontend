@@ -1,0 +1,5 @@
+export const fetchGameById = async (id: number) => {
+  const response = await fetch(`http://localhost:3000/bgg/game/${id}`);
+
+  return response.json();
+};

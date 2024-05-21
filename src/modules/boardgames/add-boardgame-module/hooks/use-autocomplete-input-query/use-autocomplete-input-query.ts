@@ -7,18 +7,19 @@ import { fetchGamesByName } from "../../repository";
 
 export const useAutocompleteInputQuery = () => {
   const [inputValue, setInputValue] = useState("");
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
+  const [selectedValue, setSelectedValue] = useState<{ value: string; id: string } | null>(null);
 
   const debouncedInputValue = useDebounce(inputValue, 500);
-
-  console.log({ debouncedInputValue });
 
   const fetch = async (name: string) => {
     const apiResponse = await fetchGamesByName(name);
 
-    console.log(apiResponse);
-
-    return apiResponse.items.map((item) => item.name);
+    return apiResponse.items.map(({ id, name }) => {
+      return {
+        id,
+        value: name,
+      };
+    });
   };
 
   const { data: options = [], isLoading } = useQuery({
@@ -26,8 +27,6 @@ export const useAutocompleteInputQuery = () => {
     queryFn: () => fetch(debouncedInputValue),
     enabled: !!debouncedInputValue && !selectedValue,
   });
-
-  console.log(options);
 
   return {
     options,

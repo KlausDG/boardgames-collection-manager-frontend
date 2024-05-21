@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 
+import { languages } from "@/utils/constants";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Autocomplete,
@@ -17,49 +18,42 @@ import {
   TextField,
 } from "@mui/material";
 
-import { NameInput } from "../../components";
+import { ControlledTextField, NameInput } from "../../components";
 import { useAutocompleteInputQuery } from "../../hooks";
+import { fetchGameById } from "../../repository";
 import { AddBoardgame, AddBoardgameSchema } from "../../schema";
 
-// type ResponseType = {
-//   id: number;
-//   name: string;
-//   type: string;
-// };
-
-// const fetchOptions = async (value: string) => {
-//   const response = await fetch(`http://localhost:3000/bgg/games/${value}`);
-//   const data = await response.json();
-//   return data.items.map((item: ResponseType) => item.name);
-// };
-
 export const AddBoardGameFormSection = () => {
-  // const [boardgamesList, setBoardgamesList] = useState([]);
+  const [name, setName] = useState("");
   const {
     control,
     watch,
     setValue,
+    getValues,
     register,
     handleSubmit,
+    trigger,
     formState: { errors },
   } = useForm<AddBoardgame>({
     resolver: yupResolver(AddBoardgameSchema),
+    defaultValues: {
+      name: { id: "", value: "" },
+      thumbnail: "",
+      description: "",
+      publishedYear: undefined,
+      language: "",
+      minPlayers: undefined,
+      maxPlayers: undefined,
+      minPlaytime: undefined,
+      maxPlaytime: undefined,
+      designers: [],
+      publishers: [],
+    },
   });
 
   console.log(watch("name"));
 
   const autocompleteHandler = useAutocompleteInputQuery();
-
-  // const [inputValue, setInputValue] = useState("");
-  // const [selectedValue, setSelectedValue] = useState<string | null>(null);
-
-  // const debouncedInputValue = useDebounce(inputValue, 500);
-
-  // const { data: options = [], isLoading } = useQuery({
-  //   queryKey: ["options", debouncedInputValue],
-  //   queryFn: () => fetchOptions(debouncedInputValue),
-  //   enabled: !!debouncedInputValue && !selectedValue,
-  // });
 
   const onSubmit: SubmitHandler<AddBoardgame> = async (data) => {
     try {
@@ -81,42 +75,69 @@ export const AddBoardGameFormSection = () => {
     }
   };
 
+  const fetchGameData = async (id: number) => {
+    const gameData = await fetchGameById(id);
+
+    if (gameData) {
+      // setValue("name", gameData.name);
+      setValue("thumbnail", gameData.thumbnail, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+      trigger("thumbnail");
+      setValue("description", gameData.description, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+      setValue("publishedYear", gameData.yearPublished, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+      setValue("minPlayers", gameData.minPlayers, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+      setValue("maxPlayers", gameData.maxPlayers, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+      setValue("minPlaytime", gameData.minPlaytime, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+      setValue("maxPlaytime", gameData.maxPlaytime, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+      setValue("designers", gameData.designers, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+      setValue("publishers", gameData.publishers, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+    }
+  };
+
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
-      <NameInput control={control} setValue={setValue} error={errors.name} />
-      {/* <Controller
-        name="name"
-        control={control}
-        render={({ field }) => (
-          <Autocomplete
-            {...field}
-            onInputChange={(_, newInputValue) => {
-              autocompleteHandler.updateInput(newInputValue);
-            }}
-            options={autocompleteHandler.options}
-            loading={autocompleteHandler.isLoading}
-            onChange={(_, newValue) => {
-              autocompleteHandler.selectValue(newValue);
-              if (newValue) {
-                setValue("name", newValue);
-              }
-            }}
-            renderInput={(params) => (
-              <TextField {...params} label="Name" error={!!errors.name} helperText={errors.name?.message} />
-            )}
-          />
-        )}
+      <NameInput control={control} setValue={setValue} error={errors?.name} />
+      {/* 
+      <TextField
+        id="teste"
+        label="teste"
+        variant="standard"
+        value={name}
+        inputMode="text"
+        inputProps={{ value: name }}
       /> */}
 
-      <Button variant="contained">Buscar no BGG</Button>
-      <TextField id="thumbnail" label="Thumbnail" variant="outlined" />
-      <TextField id="description" label="Description" variant="outlined" multiline rows={4} />
-      <TextField id="yearPublished" label="Year Published" variant="outlined" />
-      <TextField id="language" label="Language" variant="outlined" />
-      <TextField id="minPlayers" label="Min Players" variant="outlined" />
-      <TextField id="maxPlayers" label="Max Players" variant="outlined" />
-      <TextField id="minPlaytime" label="Min Playtime" variant="outlined" />
-      <TextField id="maxPlaytime" label="Max Playtime" variant="outlined" />
+      <Button
+        variant="contained"
+        disabled={!getValues("name")}
+        onClick={() => fetchGameData(Number(getValues("name").id))}
+      >
+        Buscar no BGG
+      </Button>
+
+      <ControlledTextField control={control} name="thumbnail" label="Thumbnail" />
+      <ControlledTextField control={control} name="description" label="Description" multiline rows={4} />
+      <ControlledTextField control={control} name="publishedYear" label="Published Year" />
+      <ControlledTextField control={control} name="minPlayers" label="Min Players" />
+      <ControlledTextField control={control} name="maxPlayers" label="Max Players" />
+      <ControlledTextField control={control} name="minPlaytime" label="Min Playtime" />
+      <ControlledTextField control={control} name="maxPlaytime" label="Max Playtime" />
+
+      <FormControl>
+        <InputLabel id="category">Languages</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="language"
+          value={languages[0]}
+          label="Language"
+          onChange={() => console.log("asda")}
+        >
+          {languages.map((item) => (
+            <MenuItem value={item}>{item}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      {/* <ControlledTextField control={control} name="language" label="Language" /> */}
       <FormGroup>
         <FormControlLabel control={<Checkbox defaultChecked />} label="In Collection" />
       </FormGroup>

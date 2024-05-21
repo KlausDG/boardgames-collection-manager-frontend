@@ -1,4 +1,4 @@
-import { Control, Controller, FieldError, UseFormSetValue } from "react-hook-form";
+import { Control, Controller, FieldError, FieldErrorsImpl, Merge, UseFormSetValue } from "react-hook-form";
 
 import { Autocomplete, TextField } from "@mui/material";
 
@@ -8,7 +8,7 @@ import { AddBoardgame } from "../../schema";
 type AutocompleteInputProps = {
   control: Control<AddBoardgame>;
   setValue: UseFormSetValue<AddBoardgame>;
-  error?: FieldError;
+  error?: Merge<FieldError, FieldErrorsImpl<{ id: string; value: string }>>;
 };
 
 export const NameInput = ({ control, setValue, error }: AutocompleteInputProps) => {
@@ -25,9 +25,10 @@ export const NameInput = ({ control, setValue, error }: AutocompleteInputProps) 
             updateInput(newInputValue);
           }}
           options={isLoading ? [] : options ?? []}
-          // options={options}
           autoComplete
           loading={isLoading}
+          getOptionLabel={(option) => option.value}
+          defaultValue={{ id: "", value: "" }}
           onChange={(_, newValue) => {
             selectValue(newValue);
             if (newValue) {
