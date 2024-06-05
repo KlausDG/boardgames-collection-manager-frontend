@@ -19,19 +19,17 @@ import {
 } from "@mui/material";
 
 import { ControlledTextField, NameInput } from "../../components";
-import { fetchGameById } from "../../repository";
+import { fetchGameById, scrapeAditionalData } from "../../repository";
 import { AddBoardgame, AddBoardgameSchema } from "../../schema";
 
 export const AddBoardGameFormSection = () => {
   const [name, setName] = useState("");
   const {
     control,
-    watch,
     setValue,
     getValues,
     register,
     handleSubmit,
-    trigger,
     formState: { errors },
   } = useForm<AddBoardgame>({
     resolver: yupResolver(AddBoardgameSchema),
@@ -50,6 +48,9 @@ export const AddBoardGameFormSection = () => {
       publishers: [],
       inCollection: true,
       category: "Boardgame",
+      bestPlayersCount: "",
+      rank: undefined,
+      weight: undefined,
     },
   });
   const onSubmit: SubmitHandler<AddBoardgame> = async (data) => {
@@ -85,6 +86,16 @@ export const AddBoardGameFormSection = () => {
       setValue("maxPlaytime", gameData.maxPlaytime);
       setValue("designers", gameData.designers);
       setValue("publishers", gameData.publishers, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+    }
+  };
+
+  const fetchAditionalGameData = async (id: number) => {
+    const gameData = await scrapeAditionalData(id);
+
+    if (gameData) {
+      setValue("bestPlayersCount", gameData.bestPlayersCount.join(", "));
+      setValue("rank", gameData.rank);
+      setValue("weight", gameData.weight);
     }
   };
 
@@ -153,10 +164,18 @@ export const AddBoardGameFormSection = () => {
 
       <ControlledTextField control={control} name="purchasedValue" label="Purchased Value" />
 
+      <Button
+        variant="contained"
+        disabled={!getValues("name")}
+        onClick={() => fetchAditionalGameData(Number(getValues("name").id))}
+      >
+        Buscar dados adicionais
+      </Button>
+
       {/* BGG Fields */}
-      <TextField id="bestPlayerCount" label="Best Player Count" variant="outlined" />
-      <TextField id="weight" label="Weight" variant="outlined" />
-      <TextField id="bggRank" label="Bgg Rank" variant="outlined" />
+      <ControlledTextField control={control} name="bestPlayersCount" label="Best Player Count" />
+      <ControlledTextField control={control} name="weight" label="Weight" />
+      <ControlledTextField control={control} name="rank" label="Bgg Rank" />
       <TextField id="bggLink" label="Bgg Link" variant="outlined" />
       <Autocomplete
         multiple

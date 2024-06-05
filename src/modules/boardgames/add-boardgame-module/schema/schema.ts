@@ -20,6 +20,9 @@ export const AddBoardgameSchema = yup.object().shape({
   inCollection: yup.boolean().default(true),
   category: yup.string().required(),
   purchasedValue: yup.number().positive(),
+  bestPlayersCount: yup.string(),
+  rank: yup.number().positive(),
+  weight: yup.number().positive(),
 });
 
 export type AddBoardgame = yup.InferType<typeof AddBoardgameSchema>;
