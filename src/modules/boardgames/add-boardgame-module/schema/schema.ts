@@ -17,6 +17,9 @@ export const AddBoardgameSchema = yup.object().shape({
   maxPlaytime: yup.number().positive(),
   designers: yup.array().of(DefaultPropertiesSchema).required(),
   publishers: yup.array().of(DefaultPropertiesSchema).required(),
+  inCollection: yup.boolean().default(true),
+  category: yup.string().required(),
+  purchasedValue: yup.number().positive(),
 });
 
 export type AddBoardgame = yup.InferType<typeof AddBoardgameSchema>;
