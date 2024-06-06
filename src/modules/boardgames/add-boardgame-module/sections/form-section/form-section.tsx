@@ -13,6 +13,7 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
@@ -61,6 +62,18 @@ export const AddBoardGameFormSection = () => {
   });
 
   console.log(watch("publisher"));
+
+  const styles = {
+    // Chrome, Safari, Edge, Opera
+    "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
+      "-webkit-appearance": "none",
+      margin: 0,
+    },
+    // Firefox
+    "& input[type=number]": {
+      "-moz-appearance": "textfield",
+    },
+  };
 
   const { data: designers = [], isLoading } = useQuery({
     queryKey: ["designers"],
@@ -231,7 +244,16 @@ export const AddBoardGameFormSection = () => {
         )}
       />
 
-      <ControlledTextField control={control} name="purchasedValue" label="Purchased Value" />
+      <ControlledTextField
+        control={control}
+        name="purchasedValue"
+        label="Purchased Value"
+        type="number"
+        InputProps={{
+          startAdornment: <InputAdornment position="start">$</InputAdornment>,
+          sx: styles,
+        }}
+      />
 
       <Button
         variant="contained"
