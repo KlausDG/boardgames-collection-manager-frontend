@@ -51,6 +51,7 @@ export const AddBoardGameFormSection = () => {
       bestPlayersCount: "",
       rank: undefined,
       weight: undefined,
+      link: "",
     },
   });
   const onSubmit: SubmitHandler<AddBoardgame> = async (data) => {
@@ -85,7 +86,7 @@ export const AddBoardGameFormSection = () => {
       setValue("minPlaytime", gameData.minPlaytime);
       setValue("maxPlaytime", gameData.maxPlaytime);
       setValue("designers", gameData.designers);
-      setValue("publishers", gameData.publishers, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+      setValue("publishers", gameData.publishers);
     }
   };
 
@@ -96,6 +97,7 @@ export const AddBoardGameFormSection = () => {
       setValue("bestPlayersCount", gameData.bestPlayersCount.join(", "));
       setValue("rank", gameData.rank);
       setValue("weight", gameData.weight);
+      setValue("link", gameData.link);
     }
   };
 
@@ -110,7 +112,7 @@ export const AddBoardGameFormSection = () => {
 
       <Button
         variant="contained"
-        disabled={!getValues("name")}
+        disabled={!getValues("name").value}
         onClick={() => fetchGameData(Number(getValues("name").id))}
       >
         Buscar no BGG
@@ -176,7 +178,7 @@ export const AddBoardGameFormSection = () => {
       <ControlledTextField control={control} name="bestPlayersCount" label="Best Player Count" />
       <ControlledTextField control={control} name="weight" label="Weight" />
       <ControlledTextField control={control} name="rank" label="Bgg Rank" />
-      <TextField id="bggLink" label="Bgg Link" variant="outlined" />
+      <ControlledTextField control={control} name="link" label="Bgg Link" />
       <Autocomplete
         multiple
         id="tags-outlined"
