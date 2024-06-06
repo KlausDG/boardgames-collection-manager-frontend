@@ -26,12 +26,17 @@ export const NameInput = ({ control, setValue, error }: AutocompleteInputProps) 
           }}
           options={isLoading ? [] : options ?? []}
           autoComplete
+          freeSolo
           loading={isLoading}
-          getOptionLabel={(option) => option.value}
+          getOptionLabel={(option) => (typeof option === "string" ? option : option.value)}
+          isOptionEqualToValue={(option, value) =>
+            typeof option === "string" || typeof value === "string" ? option === value : option.value === value.value
+          }
           defaultValue={{ id: "", value: "" }}
           onChange={(_, newValue) => {
+            field.onChange(newValue);
             selectValue(newValue);
-            if (newValue) {
+            if (newValue && typeof newValue !== "string") {
               setValue("name", newValue);
             }
           }}

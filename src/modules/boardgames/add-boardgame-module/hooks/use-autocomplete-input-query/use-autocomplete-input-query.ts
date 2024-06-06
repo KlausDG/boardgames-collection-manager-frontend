@@ -7,7 +7,7 @@ import { fetchGamesByName } from "../../repository";
 
 export const useAutocompleteInputQuery = () => {
   const [inputValue, setInputValue] = useState("");
-  const [selectedValue, setSelectedValue] = useState<{ value: string; id: string } | null>(null);
+  const [selectedValue, setSelectedValue] = useState<{ value: string; id: string } | string | null>(null);
 
   const debouncedInputValue = useDebounce(inputValue, 500);
 

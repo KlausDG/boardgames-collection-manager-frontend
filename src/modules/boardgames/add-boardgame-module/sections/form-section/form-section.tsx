@@ -9,6 +9,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Chip,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -17,19 +18,23 @@ import {
   Select,
   TextField,
 } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 
 import { ControlledTextField, NameInput } from "../../components";
 import { fetchGameById, scrapeAditionalData } from "../../repository";
+import { fetchDesigners } from "../../repository/fetch-designers";
 import { AddBoardgame, AddBoardgameSchema } from "../../schema";
 
 export const AddBoardGameFormSection = () => {
-  const [name, setName] = useState("");
+  const [publishers, setPublishers] = useState([]);
+
   const {
     control,
     setValue,
     getValues,
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<AddBoardgame>({
     resolver: yupResolver(AddBoardgameSchema),
@@ -45,7 +50,7 @@ export const AddBoardGameFormSection = () => {
       maxPlaytime: undefined,
       purchasedValue: undefined,
       designers: [],
-      publishers: [],
+      publisher: "",
       inCollection: true,
       category: "Boardgame",
       bestPlayersCount: "",
@@ -54,6 +59,14 @@ export const AddBoardGameFormSection = () => {
       link: "",
     },
   });
+
+  console.log(watch("publisher"));
+
+  const { data: designers = [], isLoading } = useQuery({
+    queryKey: ["designers"],
+    queryFn: fetchDesigners,
+  });
+
   const onSubmit: SubmitHandler<AddBoardgame> = async (data) => {
     try {
       const response = await fetch("/api/boardgames", {
@@ -86,7 +99,8 @@ export const AddBoardGameFormSection = () => {
       setValue("minPlaytime", gameData.minPlaytime);
       setValue("maxPlaytime", gameData.maxPlaytime);
       setValue("designers", gameData.designers);
-      setValue("publishers", gameData.publishers);
+      setValue("publisher", gameData.publishers[0]);
+      setPublishers(gameData.publishers);
     }
   };
 
@@ -112,7 +126,7 @@ export const AddBoardGameFormSection = () => {
 
       <Button
         variant="contained"
-        disabled={!getValues("name").value}
+        disabled={!watch("name").value}
         onClick={() => fetchGameData(Number(getValues("name").id))}
       >
         Buscar no BGG
@@ -121,6 +135,59 @@ export const AddBoardGameFormSection = () => {
       <ControlledTextField control={control} name="thumbnail" label="Thumbnail" />
       <ControlledTextField control={control} name="description" label="Description" rows={4} />
       <ControlledTextField control={control} name="publishedYear" label="Published Year" />
+
+      <Controller
+        name="designers"
+        control={control}
+        render={({ field }) => {
+          return (
+            <Autocomplete
+              {...field}
+              multiple
+              autoComplete
+              freeSolo
+              id="designers"
+              options={designers}
+              getOptionLabel={(option) => option}
+              filterSelectedOptions
+              isOptionEqualToValue={(option, value) => option === value}
+              onChange={(_, value) => field.onChange(value)}
+              renderInput={(params) => <TextField {...params} label="Designers" />}
+              renderOption={(props, option) => {
+                return (
+                  <li {...props} key={option}>
+                    {option}
+                  </li>
+                );
+              }}
+              renderTags={(tagValue, getTagProps) => {
+                return tagValue.map((option, index) => (
+                  <Chip {...getTagProps({ index })} key={option} label={option} />
+                ));
+              }}
+            />
+          );
+        }}
+      />
+
+      <Controller
+        name="publisher"
+        control={control}
+        render={({ field }) => (
+          <Autocomplete
+            {...field}
+            id="publisher"
+            autoComplete
+            disableClearable
+            options={publishers}
+            getOptionLabel={(option) => option}
+            isOptionEqualToValue={(option, value) => option === value}
+            onChange={(_, value) => field.onChange(value)}
+            renderInput={(params) => <TextField {...params} label="Publisher" />}
+          />
+        )}
+      />
+
       <ControlledTextField control={control} name="minPlayers" label="Min Players" />
       <ControlledTextField control={control} name="maxPlayers" label="Max Players" />
       <ControlledTextField control={control} name="minPlaytime" label="Min Playtime" />
@@ -179,15 +246,6 @@ export const AddBoardGameFormSection = () => {
       <ControlledTextField control={control} name="weight" label="Weight" />
       <ControlledTextField control={control} name="rank" label="Bgg Rank" />
       <ControlledTextField control={control} name="link" label="Bgg Link" />
-      <Autocomplete
-        multiple
-        id="tags-outlined"
-        options={[]}
-        getOptionLabel={(option) => option.title}
-        // defaultValue={}
-        filterSelectedOptions
-        renderInput={(params) => <TextField {...params} label="Designers" placeholder="Favorites" />}
-      />
     </Box>
   );
 };
