@@ -7,11 +7,17 @@ import { AddBoardgame } from "../../schema";
 
 type AutocompleteInputProps = {
   control: Control<AddBoardgame>;
-  setValue: UseFormSetValue<AddBoardgame>;
+  setFormValue: UseFormSetValue<AddBoardgame>;
+  setNameObject: React.Dispatch<
+    React.SetStateAction<{
+      id: string;
+      value: string;
+    }>
+  >;
   error?: Merge<FieldError, FieldErrorsImpl<{ id: string; value: string }>>;
 };
 
-export const NameInput = ({ control, setValue, error }: AutocompleteInputProps) => {
+export const NameInput = ({ control, setFormValue, setNameObject, error }: AutocompleteInputProps) => {
   const { isLoading, options, selectValue, updateInput } = useAutocompleteInputQuery();
 
   return (
@@ -37,7 +43,8 @@ export const NameInput = ({ control, setValue, error }: AutocompleteInputProps) 
             field.onChange(newValue);
             selectValue(newValue);
             if (newValue && typeof newValue !== "string") {
-              setValue("name", newValue);
+              setFormValue("name", newValue.value);
+              setNameObject(newValue);
             }
           }}
           renderInput={(params) => <TextField {...params} label="Name" error={!!error} helperText={error?.message} />}

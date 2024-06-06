@@ -19,15 +19,17 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { ControlledTextField, NameInput } from "../../components";
 import { fetchGameById, scrapeAditionalData } from "../../repository";
 import { fetchDesigners } from "../../repository/fetch-designers";
+import { registerGame } from "../../repository/register-game";
 import { AddBoardgame, AddBoardgameSchema } from "../../schema";
 
 export const AddBoardGameFormSection = () => {
   const [publishers, setPublishers] = useState([]);
+  const [gameNameObject, setGameNameObject] = useState({ id: "", value: "" });
 
   const {
     control,
@@ -40,10 +42,10 @@ export const AddBoardGameFormSection = () => {
   } = useForm<AddBoardgame>({
     resolver: yupResolver(AddBoardgameSchema),
     defaultValues: {
-      name: { id: "", value: "" },
+      name: "",
       thumbnail: "",
       description: "",
-      publishedYear: undefined,
+      yearPublished: undefined,
       language: "English",
       minPlayers: undefined,
       maxPlayers: undefined,
@@ -54,22 +56,18 @@ export const AddBoardGameFormSection = () => {
       publisher: "",
       inCollection: true,
       category: "Boardgame",
-      bestPlayersCount: "",
-      rank: undefined,
+      bestPlayerCount: "",
+      bggRank: undefined,
       weight: undefined,
-      link: "",
+      bggLink: "",
     },
   });
 
-  console.log(watch("publisher"));
-
   const styles = {
-    // Chrome, Safari, Edge, Opera
     "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
       "-webkit-appearance": "none",
       margin: 0,
     },
-    // Firefox
     "& input[type=number]": {
       "-moz-appearance": "textfield",
     },
@@ -80,19 +78,19 @@ export const AddBoardGameFormSection = () => {
     queryFn: fetchDesigners,
   });
 
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation<AddBoardgame, Error, AddBoardgame>({
+    mutationFn: registerGame,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["boardgames"] });
+    },
+  });
+
   const onSubmit: SubmitHandler<AddBoardgame> = async (data) => {
     try {
-      const response = await fetch("/api/boardgames", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to add boardgame");
-      }
+      console.log(data);
+      await mutation.mutateAsync(data);
 
       console.log("Boardgame added successfully");
     } catch (error) {
@@ -106,7 +104,7 @@ export const AddBoardGameFormSection = () => {
     if (gameData) {
       setValue("thumbnail", gameData.thumbnail);
       setValue("description", gameData.description);
-      setValue("publishedYear", gameData.yearPublished);
+      setValue("yearPublished", gameData.yearPublished);
       setValue("minPlayers", gameData.minPlayers);
       setValue("maxPlayers", gameData.maxPlayers);
       setValue("minPlaytime", gameData.minPlaytime);
@@ -121,10 +119,10 @@ export const AddBoardGameFormSection = () => {
     const gameData = await scrapeAditionalData(id);
 
     if (gameData) {
-      setValue("bestPlayersCount", gameData.bestPlayersCount.join(", "));
-      setValue("rank", gameData.rank);
+      setValue("bestPlayerCount", gameData.bestPlayersCount.join(", "));
+      setValue("bggRank", gameData.rank);
       setValue("weight", gameData.weight);
-      setValue("link", gameData.link);
+      setValue("bggLink", gameData.link);
     }
   };
 
@@ -135,19 +133,19 @@ export const AddBoardGameFormSection = () => {
       noValidate
       sx={{ display: "flex", flexDirection: "column", gap: "16px" }}
     >
-      <NameInput control={control} setValue={setValue} error={errors?.name} />
+      <NameInput control={control} setFormValue={setValue} setNameObject={setGameNameObject} error={errors?.name} />
 
       <Button
         variant="contained"
-        disabled={!watch("name").value}
-        onClick={() => fetchGameData(Number(getValues("name").id))}
+        disabled={!gameNameObject.value}
+        onClick={() => fetchGameData(Number(gameNameObject.id))}
       >
         Buscar no BGG
       </Button>
 
       <ControlledTextField control={control} name="thumbnail" label="Thumbnail" />
       <ControlledTextField control={control} name="description" label="Description" rows={4} />
-      <ControlledTextField control={control} name="publishedYear" label="Published Year" />
+      <ControlledTextField control={control} name="yearPublished" label="Published Year" />
 
       <Controller
         name="designers"
@@ -258,16 +256,20 @@ export const AddBoardGameFormSection = () => {
       <Button
         variant="contained"
         disabled={!getValues("name")}
-        onClick={() => fetchAditionalGameData(Number(getValues("name").id))}
+        onClick={() => fetchAditionalGameData(Number(gameNameObject.id))}
       >
         Buscar dados adicionais
       </Button>
 
       {/* BGG Fields */}
-      <ControlledTextField control={control} name="bestPlayersCount" label="Best Player Count" />
+      <ControlledTextField control={control} name="bestPlayerCount" label="Best Player Count" />
       <ControlledTextField control={control} name="weight" label="Weight" />
-      <ControlledTextField control={control} name="rank" label="Bgg Rank" />
-      <ControlledTextField control={control} name="link" label="Bgg Link" />
+      <ControlledTextField control={control} name="bggRank" label="Bgg Rank" />
+      <ControlledTextField control={control} name="bggLink" label="Bgg Link" />
+
+      <Button variant="contained" type="submit">
+        Cadastrar jogo
+      </Button>
     </Box>
   );
 };

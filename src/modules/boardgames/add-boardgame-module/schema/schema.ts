@@ -6,24 +6,24 @@ const DefaultPropertiesSchema = yup.object().shape({
 });
 
 export const AddBoardgameSchema = yup.object().shape({
-  name: DefaultPropertiesSchema.required("Name is required"),
+  name: yup.string().required("Name is required"),
   thumbnail: yup.string().required("Thumbnail is required"),
   description: yup.string(),
-  publishedYear: yup.number().required("Published Year is required"),
+  yearPublished: yup.number().required("Published Year is required"),
   language: yup.string().default("English"),
-  minPlayers: yup.number().positive(),
-  maxPlayers: yup.number().positive(),
-  minPlaytime: yup.number().positive(),
-  maxPlaytime: yup.number().positive(),
+  minPlayers: yup.number().positive().notRequired(),
+  maxPlayers: yup.number().positive().notRequired(),
+  minPlaytime: yup.number().positive().notRequired(),
+  maxPlaytime: yup.number().positive().notRequired(),
   designers: yup.array().of(yup.string().required()).required(),
   publisher: yup.string().required(),
   inCollection: yup.boolean().default(true),
   category: yup.string().required(),
   purchasedValue: yup.number().positive(),
-  bestPlayersCount: yup.string(),
-  rank: yup.number().positive(),
+  bestPlayerCount: yup.string(),
+  bggRank: yup.number().positive(),
   weight: yup.number().positive(),
-  link: yup.string().required("Bgg link is required"),
+  bggLink: yup.string().required("Bgg link is required"),
 });
 
 export type AddBoardgame = yup.InferType<typeof AddBoardgameSchema>;
