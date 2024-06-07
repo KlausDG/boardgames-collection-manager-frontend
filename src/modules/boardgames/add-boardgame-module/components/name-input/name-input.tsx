@@ -28,6 +28,7 @@ export const NameInput = ({ control, setFormValue, setNameObject, error }: Autoc
           options={isLoading ? [] : options ?? []}
           autoComplete
           freeSolo
+          fullWidth
           loading={isLoading}
           getOptionLabel={(option) => (typeof option === "string" ? option : option.value)}
           isOptionEqualToValue={(option, value) =>
@@ -42,7 +43,9 @@ export const NameInput = ({ control, setFormValue, setNameObject, error }: Autoc
               setNameObject(newValue);
             }
           }}
-          renderInput={(params) => <TextField {...params} label="Name" error={!!error} helperText={error?.message} />}
+          renderInput={(params) => (
+            <TextField {...params} label="Game Name" error={!!error} helperText={error?.message} />
+          )}
         />
       )}
     />

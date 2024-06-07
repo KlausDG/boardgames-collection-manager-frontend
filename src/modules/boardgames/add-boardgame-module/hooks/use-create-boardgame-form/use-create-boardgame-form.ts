@@ -10,6 +10,27 @@ import { fetchDesigners } from "../../repository/fetch-designers";
 import { registerGame } from "../../repository/register-game";
 import { AddBoardgame, AddBoardgameSchema } from "../../schema";
 
+const defaultValues = {
+  name: "",
+  thumbnail: "",
+  description: "",
+  yearPublished: undefined,
+  language: "English",
+  minPlayers: undefined,
+  maxPlayers: undefined,
+  minPlaytime: undefined,
+  maxPlaytime: undefined,
+  purchasedValue: undefined,
+  designers: [],
+  publisher: "",
+  inCollection: true,
+  category: "Boardgame",
+  bestPlayerCount: "",
+  bggRank: undefined,
+  weight: undefined,
+  bggLink: "",
+};
+
 export const useCreateBoardgameForm = () => {
   const [publishers, setPublishers] = useState([]);
   const [gameNameObject, setGameNameObject] = useState({ id: "", value: "" });
@@ -20,31 +41,16 @@ export const useCreateBoardgameForm = () => {
 
   const { setValue, ...formProps } = useForm<AddBoardgame>({
     resolver: yupResolver(AddBoardgameSchema),
-    defaultValues: {
-      name: "",
-      thumbnail: "",
-      description: "",
-      yearPublished: undefined,
-      language: "English",
-      minPlayers: undefined,
-      maxPlayers: undefined,
-      minPlaytime: undefined,
-      maxPlaytime: undefined,
-      purchasedValue: undefined,
-      designers: [],
-      publisher: "",
-      inCollection: true,
-      category: "Boardgame",
-      bestPlayerCount: "",
-      bggRank: undefined,
-      weight: undefined,
-      bggLink: "",
-    },
+    defaultValues,
   });
 
   const { data: designers = [], isLoading: isFetchingDesigners } = useQuery({
     queryKey: ["designers"],
-    queryFn: fetchDesigners,
+    queryFn: async () => {
+      const apiResponse = await fetchDesigners();
+
+      return apiResponse.map((designer) => designer.name);
+    },
   });
 
   const queryClient = useQueryClient();

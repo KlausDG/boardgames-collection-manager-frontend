@@ -10,6 +10,7 @@ type ControlledTextFieldProps = {
   control: Control<AddBoardgame>;
   isLoading?: boolean;
   name: keyof AddBoardgame;
+  skeletonHeight?: string | number;
 } & TextFieldProps;
 
 export const ControlledTextField = ({
@@ -17,10 +18,11 @@ export const ControlledTextField = ({
   isLoading = false,
   name,
   label,
+  skeletonHeight = 56,
   ...props
 }: ControlledTextFieldProps) => {
   return isLoading ? (
-    <Skeleton animation="wave" height={56} />
+    <Skeleton animation="wave" height={skeletonHeight} />
   ) : (
     <Controller
       name={name}
@@ -33,31 +35,10 @@ export const ControlledTextField = ({
           value={value ? value : ""}
           id={name}
           label={label}
-          variant="outlined"
+          fullWidth
           {...props}
         />
       )}
     />
   );
-
-  // return (
-  //   {isLoading ? <Skeleton animation="wave" /> :
-  //   <Controller
-  //     name={name}
-  //     control={control}
-  //     render={({ field: { onChange, value }, fieldState }) => (
-  //       <TextField
-  //         helperText={fieldState.error ? fieldState.error.message : null}
-  //         size="small"
-  //         error={!!fieldState.error}
-  //         onChange={onChange}
-  //         value={value ? value : ""}
-  //         id={name}
-  //         label={label}
-  //         variant="outlined"
-  //         {...props}
-  //       />
-  //     )}
-  //   />}
-  // );
 };

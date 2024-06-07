@@ -3,5 +3,5 @@ export const fetchDesigners = async () => {
 
   const jsonResponse = await response.json();
 
-  return jsonResponse as Array<string>;
+  return jsonResponse as Array<{ id: string; name: string }>;
 };

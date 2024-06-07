@@ -1,10 +1,7 @@
-import "primereact/resources/primereact.min.css";
 import "./globals.css";
 
-// import "primeicons/primeicons.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { PrimeReactProvider } from "primereact/api";
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { CssBaseline } from "@mui/material";
@@ -33,12 +30,10 @@ export default function RootLayout({
         <body className={inter.className}>
           <AppRouterCacheProvider>
             <ThemeProvider theme={darkTheme}>
-              <PrimeReactProvider>
-                <CssBaseline />
-                <Providers>
-                  <Layout>{children}</Layout>
-                </Providers>
-              </PrimeReactProvider>
+              <CssBaseline />
+              <Providers>
+                <Layout>{children}</Layout>
+              </Providers>
             </ThemeProvider>
           </AppRouterCacheProvider>
         </body>
