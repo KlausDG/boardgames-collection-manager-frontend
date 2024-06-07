@@ -8,12 +8,7 @@ import { AddBoardgame } from "../../schema";
 type AutocompleteInputProps = {
   control: Control<AddBoardgame>;
   setFormValue: UseFormSetValue<AddBoardgame>;
-  setNameObject: React.Dispatch<
-    React.SetStateAction<{
-      id: string;
-      value: string;
-    }>
-  >;
+  setNameObject: (value: { id: string; value: string }) => void;
   error?: Merge<FieldError, FieldErrorsImpl<{ id: string; value: string }>>;
 };
 
