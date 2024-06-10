@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -9,6 +9,9 @@ import { fetchGameById, scrapeAditionalData } from "../../repository";
 import { fetchDesigners } from "../../repository/fetch-designers";
 import { registerGame } from "../../repository/register-game";
 import { AddBoardgame, AddBoardgameSchema } from "../../schema";
+import { AddBoardgameFormContextValue } from "./add-boardgame-form-provider.types";
+
+const AddBoardgameFormContext = createContext<AddBoardgameFormContextValue | undefined>(undefined);
 
 const defaultValues = {
   name: "",
@@ -31,7 +34,7 @@ const defaultValues = {
   bggLink: "",
 };
 
-export const useCreateBoardgameForm = () => {
+export const AddBoardgameFormProvider = ({ children }: { children: React.ReactNode }) => {
   const [publishers, setPublishers] = useState([]);
   const [gameNameObject, setGameNameObject] = useState({ id: "", value: "" });
 
@@ -110,7 +113,7 @@ export const useCreateBoardgameForm = () => {
     enabled: false,
   });
 
-  return {
+  const value = {
     publishers,
     gameNameObject,
     updateGameNameObject,
@@ -130,4 +133,16 @@ export const useCreateBoardgameForm = () => {
     setValue,
     ...formProps,
   };
+
+  return <AddBoardgameFormContext.Provider value={value}>{children}</AddBoardgameFormContext.Provider>;
+};
+
+export const useAddBoardgameForm = () => {
+  const context = useContext(AddBoardgameFormContext);
+
+  if (context === undefined) {
+    throw new Error("useAddBoardgameForm must be used within a AddBoardgameFormProvider");
+  }
+
+  return context;
 };
