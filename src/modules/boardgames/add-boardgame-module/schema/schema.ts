@@ -24,6 +24,7 @@ export const AddBoardgameSchema = yup.object().shape({
   bggRank: yup.number().positive(),
   weight: yup.number().positive(),
   bggLink: yup.string().required("Bgg link is required"),
+  bggId: yup.number(),
 });
 
 export type AddBoardgame = yup.InferType<typeof AddBoardgameSchema>;

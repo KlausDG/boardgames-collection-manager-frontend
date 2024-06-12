@@ -5,14 +5,16 @@ import { useQuery } from "@tanstack/react-query";
 
 import { fetchGamesByName } from "../../repository";
 
+type SelectedValueState = { value: string; id: string } | string | null;
+
 export const useAutocompleteInputQuery = () => {
   const [inputValue, setInputValue] = useState("");
-  const [selectedValue, setSelectedValue] = useState<{ value: string; id: string } | string | null>(null);
+  const [selectedValue, setSelectedValue] = useState<SelectedValueState>(null);
 
   const debouncedInputValue = useDebounce(inputValue, 500);
 
   const fetch = async (name: string) => {
-    const apiResponse = await fetchGamesByName(name);
+    const apiResponse = await fetchGamesByName(name.replace(" ", "+"));
 
     return apiResponse.items.map(({ id, name }) => {
       return {

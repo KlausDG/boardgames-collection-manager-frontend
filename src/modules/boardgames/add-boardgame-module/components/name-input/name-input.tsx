@@ -23,6 +23,7 @@ export const NameInput = ({ control, setFormValue, setNameObject, error }: Autoc
         <Autocomplete
           {...field}
           onInputChange={(_, newInputValue) => {
+            selectValue(null);
             updateInput(newInputValue);
           }}
           options={isLoading ? [] : options ?? []}
@@ -38,6 +39,7 @@ export const NameInput = ({ control, setFormValue, setNameObject, error }: Autoc
           onChange={(_, newValue) => {
             field.onChange(newValue);
             selectValue(newValue);
+
             if (newValue && typeof newValue !== "string") {
               setFormValue("name", newValue.value);
               setNameObject(newValue);

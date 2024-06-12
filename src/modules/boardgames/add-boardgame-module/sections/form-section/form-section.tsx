@@ -10,14 +10,14 @@ import { NameSearchSection } from "../name-search-section";
 import { UntrackedInformationsSection } from "../untracked-informations-section";
 
 export const AddBoardGameFormSection = () => {
-  const { handleSubmit, onSubmit, gameData, aditionalGameData } = useAddBoardgameForm();
+  const { handleSubmit, form } = useAddBoardgameForm();
 
   return (
     <Box display="flex" flexDirection="column" gap="64px">
       <Typography variant="h4">Add Boardgame</Typography>
 
       <Container disableGutters>
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+        <Box component="form" onSubmit={handleSubmit(form.submit)} noValidate>
           <Grid container spacing={2}>
             <NameSearchSection />
             <MainInformationSection />
@@ -28,12 +28,7 @@ export const AddBoardGameFormSection = () => {
             </Grid>
 
             <Box paddingTop={2} paddingRight={1} width="100%" display="flex" justifyContent="flex-end">
-              <Button
-                variant="contained"
-                type="submit"
-                size="large"
-                disabled={gameData.loading || aditionalGameData.loading}
-              >
+              <Button variant="contained" type="submit" size="large" disabled={form.loading}>
                 Register Game
               </Button>
             </Box>

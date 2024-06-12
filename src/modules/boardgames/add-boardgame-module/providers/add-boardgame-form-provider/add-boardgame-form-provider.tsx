@@ -1,13 +1,15 @@
-import React, { createContext, useContext, useState } from "react";
+import "react-toastify/dist/ReactToastify.css"; // Import toastify CSS
 
+import React, { createContext, useContext, useEffect, useState } from "react";
+
+import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast, ToastContainer } from "react-toastify";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { fetchGameById, scrapeAditionalData } from "../../repository";
-import { fetchDesigners } from "../../repository/fetch-designers";
-import { registerGame } from "../../repository/register-game";
+import { ConfirmationModal } from "../../components";
+import { useAdditionalGameData, useCheckGameInstance, useDesigners, useGameData, useRegisterGame } from "../../hooks";
 import { AddBoardgame, AddBoardgameSchema } from "../../schema";
 import { AddBoardgameFormContextValue } from "./add-boardgame-form-provider.types";
 
@@ -32,86 +34,101 @@ const defaultValues = {
   bggRank: undefined,
   weight: undefined,
   bggLink: "",
+  bggId: undefined,
 };
 
 export const AddBoardgameFormProvider = ({ children }: { children: React.ReactNode }) => {
   const [publishers, setPublishers] = useState([]);
   const [gameNameObject, setGameNameObject] = useState({ id: "", value: "" });
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const updateGameNameObject = (value: typeof gameNameObject) => {
-    setGameNameObject(value);
-  };
+  const router = useRouter();
 
   const { setValue, ...formProps } = useForm<AddBoardgame>({
     resolver: yupResolver(AddBoardgameSchema),
     defaultValues,
   });
 
-  const { data: designers = [], isLoading: isFetchingDesigners } = useQuery({
-    queryKey: ["designers"],
-    queryFn: async () => {
-      const apiResponse = await fetchDesigners();
+  const { data: designers = [], isLoading: isFetchingDesigners } = useDesigners();
+  const { data: alreadyInDatabase, isLoading: isCheckingGameInstance } = useCheckGameInstance(gameNameObject.id);
+  const { data: gameData, refetch: fetchGameData, isLoading: isFetchingGameData } = useGameData(gameNameObject.id);
+  const {
+    data: aditionalGameData,
+    refetch: fetchAditionalGameData,
+    isLoading: isFetchingAditionalGameData,
+  } = useAdditionalGameData(gameNameObject.id);
 
-      return apiResponse.map((designer) => designer.name);
-    },
-  });
-
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation<AddBoardgame, Error, AddBoardgame>({
-    mutationFn: registerGame,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["boardgames"] });
-    },
-  });
+  const mutation = useRegisterGame(setModalOpen, formProps.setError);
 
   const onSubmit: SubmitHandler<AddBoardgame> = async (data) => {
     try {
       await mutation.mutateAsync(data);
-      console.log("Boardgame added successfully");
-      //Ao adicionar o boardgame na lista, exibir um modal perguntando se gostaria de adicionar outro
     } catch (error) {
       console.error(error);
     }
   };
 
-  const { refetch: fetchGameData, isLoading: isFetchingGameData } = useQuery({
-    queryKey: ["gameData"],
-    queryFn: async () => {
-      const gameData = await fetchGameById(gameNameObject.id);
-      if (gameData) {
-        setValue("thumbnail", gameData.thumbnail);
-        setValue("description", gameData.description);
-        setValue("yearPublished", gameData.yearPublished);
-        setValue("minPlayers", gameData.minPlayers);
-        setValue("maxPlayers", gameData.maxPlayers);
-        setValue("minPlaytime", gameData.minPlaytime);
-        setValue("maxPlaytime", gameData.maxPlaytime);
-        setValue("designers", gameData.designers);
-        setValue("publisher", gameData.publishers[0]);
-        setPublishers(gameData.publishers);
-      }
+  useEffect(() => {
+    if (gameData) {
+      setValue("thumbnail", gameData.thumbnail);
+      setValue("description", gameData.description);
+      setValue("yearPublished", gameData.yearPublished);
+      setValue("minPlayers", gameData.minPlayers);
+      setValue("maxPlayers", gameData.maxPlayers);
+      setValue("minPlaytime", gameData.minPlaytime);
+      setValue("maxPlaytime", gameData.maxPlaytime);
+      setValue("designers", gameData.designers);
+      setValue("publisher", gameData.publishers[0]);
+      setValue("bggId", Number(gameNameObject.id));
+      setPublishers(gameData.publishers);
+    }
+  }, [gameData]);
 
-      return gameData;
-    },
-    enabled: false,
-  });
+  useEffect(() => {
+    if (aditionalGameData) {
+      setValue("bestPlayerCount", aditionalGameData.bestPlayersCount.join(", "));
+      setValue("bggRank", aditionalGameData.rank);
+      setValue("weight", aditionalGameData.weight);
+      setValue("bggLink", aditionalGameData.link);
+    }
+  }, [aditionalGameData]);
 
-  const { refetch: fetchAditionalGameData, isLoading: isFetchingAditionalGameData } = useQuery({
-    queryKey: ["aditionalGameData"],
-    queryFn: async () => {
-      const gameData = await scrapeAditionalData(gameNameObject.id);
-      if (gameData) {
-        setValue("bestPlayerCount", gameData.bestPlayersCount.join(", "));
-        setValue("bggRank", gameData.rank);
-        setValue("weight", gameData.weight);
-        setValue("bggLink", gameData.link);
-      }
+  useEffect(() => {
+    if (!!gameNameObject.value && alreadyInDatabase === false) {
+      fetchGameData();
+      fetchAditionalGameData();
+    }
+  }, [alreadyInDatabase, gameNameObject.value]);
 
-      return gameData;
-    },
-    enabled: false,
-  });
+  useEffect(() => {
+    if (alreadyInDatabase) {
+      const errorMessage = "Game already in the collection";
+      toast.error(errorMessage);
+
+      formProps.setError("name", {
+        type: "manual",
+        message: errorMessage,
+      });
+    }
+  }, [alreadyInDatabase]);
+
+  const updateGameNameObject = (gameName: typeof gameNameObject) => {
+    formProps.reset({ name: gameName.value });
+    setGameNameObject(gameName);
+  };
+
+  const reloadPage = () => {
+    window.location.reload();
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    router.push("/boardgames");
+  };
+
+  const handleConfirm = () => {
+    reloadPage();
+  };
 
   const value = {
     publishers,
@@ -121,20 +138,26 @@ export const AddBoardgameFormProvider = ({ children }: { children: React.ReactNo
       loading: isFetchingDesigners,
       list: designers,
     },
-    gameData: {
-      fetch: fetchGameData,
-      loading: isFetchingGameData,
+    form: {
+      submit: onSubmit,
+      success: mutation.isSuccess,
+      error: mutation.error,
+      reset: mutation.reset,
+      loading: isCheckingGameInstance || isFetchingGameData || isFetchingAditionalGameData,
     },
-    aditionalGameData: {
-      fetch: fetchAditionalGameData,
-      loading: isFetchingAditionalGameData,
-    },
-    onSubmit,
     setValue,
     ...formProps,
   };
 
-  return <AddBoardgameFormContext.Provider value={value}>{children}</AddBoardgameFormContext.Provider>;
+  return (
+    <AddBoardgameFormContext.Provider value={value}>
+      {children}
+      <ToastContainer theme="dark" />
+      {mutation.isSuccess && (
+        <ConfirmationModal open={modalOpen} handleConfirm={handleConfirm} handleClose={closeModal} />
+      )}
+    </AddBoardgameFormContext.Provider>
+  );
 };
 
 export const useAddBoardgameForm = () => {

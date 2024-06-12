@@ -7,13 +7,11 @@ type Designer = {
   list: string[];
 };
 
-type GameData = {
-  fetch: () => void;
-  loading: boolean;
-};
-
-type AdditionalGameData = {
-  fetch: () => void;
+type Form = {
+  submit: SubmitHandler<AddBoardgame>;
+  success: boolean;
+  error: Error | null;
+  reset: () => void;
   loading: boolean;
 };
 
@@ -22,7 +20,5 @@ export type AddBoardgameFormContextValue = {
   gameNameObject: { id: string; value: string };
   updateGameNameObject: (value: { id: string; value: string }) => void;
   designers: Designer;
-  gameData: GameData;
-  aditionalGameData: AdditionalGameData;
-  onSubmit: SubmitHandler<AddBoardgame>;
+  form: Form;
 } & UseFormReturn<AddBoardgame>;

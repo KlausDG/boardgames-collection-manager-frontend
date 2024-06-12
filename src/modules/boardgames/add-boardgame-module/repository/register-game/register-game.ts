@@ -9,5 +9,10 @@ export const registerGame = async (dto: AddBoardgame) => {
     body: JSON.stringify(dto),
   });
 
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(JSON.stringify({ message: errorData.message, status: response.status }));
+  }
+
   return response.json();
 };
