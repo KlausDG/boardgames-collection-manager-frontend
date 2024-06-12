@@ -5,20 +5,23 @@ import { useQuery } from "@tanstack/react-query";
 
 import { fetchGamesByName } from "../../repository";
 
+type SelectedValueState = { value: string; id: string } | string | null;
+
 export const useAutocompleteInputQuery = () => {
   const [inputValue, setInputValue] = useState("");
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
+  const [selectedValue, setSelectedValue] = useState<SelectedValueState>(null);
 
   const debouncedInputValue = useDebounce(inputValue, 500);
 
-  console.log({ debouncedInputValue });
-
   const fetch = async (name: string) => {
-    const apiResponse = await fetchGamesByName(name);
+    const apiResponse = await fetchGamesByName(name.replace(" ", "+"));
 
-    console.log(apiResponse);
-
-    return apiResponse.items.map((item) => item.name);
+    return apiResponse.items.map(({ id, name }) => {
+      return {
+        id,
+        value: name,
+      };
+    });
   };
 
   const { data: options = [], isLoading } = useQuery({
@@ -26,8 +29,6 @@ export const useAutocompleteInputQuery = () => {
     queryFn: () => fetch(debouncedInputValue),
     enabled: !!debouncedInputValue && !selectedValue,
   });
-
-  console.log(options);
 
   return {
     options,

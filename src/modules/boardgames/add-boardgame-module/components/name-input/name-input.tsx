@@ -1,4 +1,4 @@
-import { Control, Controller, FieldError, UseFormSetValue } from "react-hook-form";
+import { Control, Controller, FieldError, FieldErrorsImpl, Merge, UseFormSetValue } from "react-hook-form";
 
 import { Autocomplete, TextField } from "@mui/material";
 
@@ -7,11 +7,12 @@ import { AddBoardgame } from "../../schema";
 
 type AutocompleteInputProps = {
   control: Control<AddBoardgame>;
-  setValue: UseFormSetValue<AddBoardgame>;
-  error?: FieldError;
+  setFormValue: UseFormSetValue<AddBoardgame>;
+  setNameObject: (value: { id: string; value: string }) => void;
+  error?: Merge<FieldError, FieldErrorsImpl<{ id: string; value: string }>>;
 };
 
-export const NameInput = ({ control, setValue, error }: AutocompleteInputProps) => {
+export const NameInput = ({ control, setFormValue, setNameObject, error }: AutocompleteInputProps) => {
   const { isLoading, options, selectValue, updateInput } = useAutocompleteInputQuery();
 
   return (
@@ -22,19 +23,31 @@ export const NameInput = ({ control, setValue, error }: AutocompleteInputProps) 
         <Autocomplete
           {...field}
           onInputChange={(_, newInputValue) => {
+            selectValue(null);
             updateInput(newInputValue);
           }}
           options={isLoading ? [] : options ?? []}
-          // options={options}
           autoComplete
+          freeSolo
+          fullWidth
           loading={isLoading}
+          getOptionLabel={(option) => (typeof option === "string" ? option : option.value)}
+          isOptionEqualToValue={(option, value) =>
+            typeof option === "string" || typeof value === "string" ? option === value : option.value === value.value
+          }
+          defaultValue={{ id: "", value: "" }}
           onChange={(_, newValue) => {
+            field.onChange(newValue);
             selectValue(newValue);
-            if (newValue) {
-              setValue("name", newValue);
+
+            if (newValue && typeof newValue !== "string") {
+              setFormValue("name", newValue.value);
+              setNameObject(newValue);
             }
           }}
-          renderInput={(params) => <TextField {...params} label="Name" error={!!error} helperText={error?.message} />}
+          renderInput={(params) => (
+            <TextField {...params} label="Game Name" error={!!error} helperText={error?.message} />
+          )}
         />
       )}
     />

@@ -1,6 +1,4 @@
 "use client";
-import * as React from "react";
-
 import Link from "next/link";
 
 import { Box, Drawer, List, ListItem, ListItemText } from "@mui/material";
@@ -9,7 +7,7 @@ const drawerWidth = 240;
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", width: "100vw", height: "100vh" }}>
       <Drawer
         variant="permanent"
         sx={{
@@ -37,7 +35,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </List>
         </Box>
       </Drawer>
-      <Box component="main">{children}</Box>
+      <Box component="main" width="100%" padding="24px">
+        {children}
+      </Box>
     </Box>
   );
 };
