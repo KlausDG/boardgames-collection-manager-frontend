@@ -1,9 +1,10 @@
 import React from "react";
 
+import { CardContainer } from "@/components";
 import { Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 
-import { ControlledTextField, DesignersInput, FormSectionContainer, PublisherInput } from "../../components";
+import { ControlledTextField, DesignersInput, PublisherInput } from "../../components";
 import { useAddBoardgameForm } from "../../providers";
 
 export const MainInformationSection = () => {
@@ -16,7 +17,7 @@ export const MainInformationSection = () => {
 
   return (
     <Grid sm={6}>
-      <FormSectionContainer>
+      <CardContainer>
         <Grid container spacing={2}>
           <Grid xs={12}>
             <Typography variant="h5">Main Informations</Typography>
@@ -59,7 +60,7 @@ export const MainInformationSection = () => {
             <ControlledTextField control={control} name="maxPlaytime" label="Max Playtime" isLoading={loading} />
           </Grid>
         </Grid>
-      </FormSectionContainer>
+      </CardContainer>
     </Grid>
   );
 };

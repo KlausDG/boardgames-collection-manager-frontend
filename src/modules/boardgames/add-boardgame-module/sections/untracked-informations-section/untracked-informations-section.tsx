@@ -2,19 +2,19 @@ import React from "react";
 
 import { Controller } from "react-hook-form";
 
+import { CardContainer } from "@/components";
 import { MoneyInput } from "@/components/form";
 import { languages } from "@/utils/constants";
 import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 
-import { FormSectionContainer } from "../../components";
 import { useAddBoardgameForm } from "../../providers";
 
 export const UntrackedInformationsSection = () => {
   const { register, control } = useAddBoardgameForm();
 
   return (
-    <FormSectionContainer>
+    <CardContainer>
       <Grid container spacing={2}>
         <Grid xs={12}>
           <Typography variant="h5">Untracked Informations</Typography>
@@ -74,6 +74,6 @@ export const UntrackedInformationsSection = () => {
           </FormControl>
         </Grid>
       </Grid>
-    </FormSectionContainer>
+    </CardContainer>
   );
 };

@@ -1,9 +1,10 @@
 import React from "react";
 
+import { CardContainer } from "@/components";
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 
-import { FormSectionContainer, NameInput } from "../../components";
+import { NameInput } from "../../components";
 import { useAddBoardgameForm } from "../../providers";
 
 export const NameSearchSection = () => {
@@ -16,7 +17,7 @@ export const NameSearchSection = () => {
 
   return (
     <Grid sm={12}>
-      <FormSectionContainer>
+      <CardContainer>
         <Box sx={{ display: "flex", gap: "8px" }}>
           <NameInput
             control={control}
@@ -25,7 +26,7 @@ export const NameSearchSection = () => {
             error={errors?.name}
           />
         </Box>
-      </FormSectionContainer>
+      </CardContainer>
     </Grid>
   );
 };
