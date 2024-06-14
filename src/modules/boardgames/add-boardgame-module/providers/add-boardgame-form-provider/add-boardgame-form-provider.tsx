@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 
+import { WithChildren } from "@/utils/types";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { ConfirmationModal } from "../../components";
@@ -37,7 +38,7 @@ const defaultValues = {
   bggId: undefined,
 };
 
-export const AddBoardgameFormProvider = ({ children }: { children: React.ReactNode }) => {
+export const AddBoardgameFormProvider = ({ children }: WithChildren) => {
   const [publishers, setPublishers] = useState([]);
   const [gameNameObject, setGameNameObject] = useState({ id: "", value: "" });
   const [modalOpen, setModalOpen] = useState(false);
