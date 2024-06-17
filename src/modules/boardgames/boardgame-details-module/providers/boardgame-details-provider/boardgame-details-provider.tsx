@@ -16,7 +16,7 @@ export const BoardgameDetailsProvider = ({ children }: WithChildren) => {
     queryKey: ["boardgame-details", boardgameId],
     queryFn: async () => {
       if (boardgameId) {
-        const apiResponse = await fetchBoardgameDetails(boardgameId);
+        const apiResponse = fetchBoardgameDetails(boardgameId);
         return apiResponse;
       }
     },
