@@ -1,7 +1,6 @@
 import React from "react";
 
 import { CardContainer } from "@/components";
-import { Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 
 import { ControlledTextField, DesignersInput, PublisherInput } from "../../components";
@@ -19,10 +18,6 @@ export const MainInformationSection = () => {
     <Grid sm={6}>
       <CardContainer>
         <Grid container spacing={2}>
-          <Grid xs={12}>
-            <Typography variant="h5">Main Informations</Typography>
-          </Grid>
-
           <Grid xs={6}>
             <ControlledTextField control={control} name="yearPublished" label="Published Year" isLoading={loading} />
           </Grid>

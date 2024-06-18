@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 const DefaultPropertiesSchema = yup.object().shape({
-  id: yup.string().required(),
+  id: yup.number().required(),
   value: yup.string().required(),
 });
 
@@ -25,6 +25,8 @@ export const AddBoardgameSchema = yup.object().shape({
   weight: yup.number().positive(),
   bggLink: yup.string().required("Bgg link is required"),
   bggId: yup.number(),
+  isExpansion: yup.boolean().default(false),
+  isExpansionFor: DefaultPropertiesSchema,
 });
 
 export type AddBoardgame = yup.InferType<typeof AddBoardgameSchema>;

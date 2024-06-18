@@ -10,11 +10,11 @@ export const MoneyInput = React.forwardRef<HTMLDivElement, MoneyInputProps>(
   ({ label, ...props }: MoneyInputProps, ref) => {
     const styles = {
       "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
-        "-webkit-appearance": "none",
+        WebkitAppearance: "none",
         margin: 0,
       },
       "& input[type=number]": {
-        "-moz-appearance": "textfield",
+        MozAppearance: "textfield",
       },
     };
 
@@ -22,6 +22,7 @@ export const MoneyInput = React.forwardRef<HTMLDivElement, MoneyInputProps>(
       <TextField
         {...props}
         type="number"
+        size="small"
         fullWidth
         ref={ref}
         label={label}

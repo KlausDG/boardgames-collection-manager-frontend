@@ -11,7 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { ConfirmationModal } from "../../components";
 import { useAdditionalGameData, useCheckGameInstance, useDesigners, useGameData, useRegisterGame } from "../../hooks";
-import { AddBoardgame, AddBoardgameSchema } from "../../schema";
+import { AddBoardgame, AddBoardgameSchema, DefaultProperties } from "../../schema";
 import { AddBoardgameFormContextValue } from "./add-boardgame-form-provider.types";
 
 const AddBoardgameFormContext = createContext<AddBoardgameFormContextValue | undefined>(undefined);
@@ -36,12 +36,14 @@ const defaultValues = {
   weight: undefined,
   bggLink: "",
   bggId: undefined,
+  isExpansionFor: {} as DefaultProperties,
 };
 
 export const AddBoardgameFormProvider = ({ children }: WithChildren) => {
-  const [publishers, setPublishers] = useState([]);
+  const [publishers, setPublishers] = useState<Array<string>>([]);
   const [gameNameObject, setGameNameObject] = useState({ id: "", value: "" });
   const [modalOpen, setModalOpen] = useState(false);
+  const [espansions, setExpansion] = useState<Array<{ id: number; value: string }>>([]);
 
   const router = useRouter();
 
@@ -69,19 +71,30 @@ export const AddBoardgameFormProvider = ({ children }: WithChildren) => {
     }
   };
 
+  console.log(formProps.watch());
+
   useEffect(() => {
     if (gameData) {
-      setValue("thumbnail", gameData.thumbnail);
-      setValue("description", gameData.description);
-      setValue("yearPublished", gameData.yearPublished);
-      setValue("minPlayers", gameData.minPlayers);
-      setValue("maxPlayers", gameData.maxPlayers);
-      setValue("minPlaytime", gameData.minPlaytime);
-      setValue("maxPlaytime", gameData.maxPlaytime);
-      setValue("designers", gameData.designers);
-      setValue("publisher", gameData.publishers[0]);
-      setValue("bggId", Number(gameNameObject.id));
+      const currentValues = formProps.getValues();
+
+      formProps.reset({
+        ...currentValues,
+        thumbnail: gameData.thumbnail,
+        description: gameData.description,
+        yearPublished: gameData.yearPublished,
+        minPlayers: gameData.minPlayers,
+        maxPlayers: gameData.maxPlayers,
+        minPlaytime: gameData.minPlaytime,
+        maxPlaytime: gameData.maxPlaytime,
+        designers: gameData.designers,
+        publisher: gameData.publishers[0],
+        isExpansion: gameData.isExpansion,
+        bggId: Number(gameNameObject.id),
+        isExpansionFor: gameData.isExpansion ? gameData.isExpansionFor[0] : ({} as DefaultProperties),
+      });
+
       setPublishers(gameData.publishers);
+      setExpansion(gameData.isExpansionFor);
     }
   }, [gameData]);
 
@@ -114,7 +127,7 @@ export const AddBoardgameFormProvider = ({ children }: WithChildren) => {
   }, [alreadyInDatabase]);
 
   const updateGameNameObject = (gameName: typeof gameNameObject) => {
-    formProps.reset({ name: gameName.value });
+    formProps.reset({ ...defaultValues, name: gameName.value });
     setGameNameObject(gameName);
   };
 
@@ -145,6 +158,10 @@ export const AddBoardgameFormProvider = ({ children }: WithChildren) => {
       error: mutation.error,
       reset: mutation.reset,
       loading: isCheckingGameInstance || isFetchingGameData || isFetchingAditionalGameData,
+    },
+    expansion: {
+      is: !!gameData?.isExpansion,
+      for: espansions,
     },
     setValue,
     ...formProps,
