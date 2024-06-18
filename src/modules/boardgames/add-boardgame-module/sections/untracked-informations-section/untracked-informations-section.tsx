@@ -5,7 +5,7 @@ import { Controller } from "react-hook-form";
 import { CardContainer } from "@/components";
 import { MoneyInput } from "@/components/form";
 import { languages } from "@/utils/constants";
-import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Typography } from "@mui/material";
+import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 
 import { useAddBoardgameForm } from "../../providers";
@@ -16,15 +16,12 @@ export const UntrackedInformationsSection = () => {
   return (
     <CardContainer>
       <Grid container spacing={2}>
-        <Grid xs={12}>
-          <Typography variant="h5">Untracked Informations</Typography>
-        </Grid>
         <Grid xs={6}>
           <Controller
             name="language"
             control={control}
             render={({ field }) => (
-              <FormControl fullWidth>
+              <FormControl fullWidth size="small">
                 <InputLabel id="languages-label">Language</InputLabel>
                 <Select id="language" {...field}>
                   {languages.map((item) => (
@@ -43,7 +40,7 @@ export const UntrackedInformationsSection = () => {
             name="category"
             control={control}
             render={({ field }) => (
-              <FormControl fullWidth>
+              <FormControl fullWidth size="small">
                 <InputLabel id="category-label">Category</InputLabel>
                 <Select id="category" {...field}>
                   {["Boardgame", "Expansion"].map((item) => (

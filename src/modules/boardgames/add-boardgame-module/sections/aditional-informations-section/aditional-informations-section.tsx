@@ -1,7 +1,6 @@
 import React from "react";
 
 import { CardContainer } from "@/components";
-import { Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 
 import { ControlledTextField } from "../../components";
@@ -14,12 +13,8 @@ export const AditionalInformationsSection = () => {
   } = useAddBoardgameForm();
 
   return (
-    <CardContainer sx={{ marginBottom: "17px" }}>
+    <CardContainer>
       <Grid container spacing={2}>
-        <Grid xs={12}>
-          <Typography variant="h5"> Aditional Informations</Typography>
-        </Grid>
-
         <Grid xs={4}>
           <ControlledTextField control={control} name="bestPlayerCount" label="Best Player Count" isLoading={loading} />
         </Grid>

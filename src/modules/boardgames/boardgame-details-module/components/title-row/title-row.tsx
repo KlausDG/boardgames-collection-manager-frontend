@@ -14,7 +14,6 @@ export const TitleRow = ({ boardgame }: TitleRowProps) => {
         <Skeleton animation="wave" height={20} />
       ) : (
         <>
-          {" "}
           <Typography variant="h5">{boardgame.name}</Typography>
           <Link href={boardgame.bggLink} underline="hover" target="_blank" variant="caption">
             BGG RANK: {boardgame.bggRank}
