@@ -65,13 +65,15 @@ export const AddBoardgameFormProvider = ({ children }: WithChildren) => {
 
   const onSubmit: SubmitHandler<AddBoardgame> = async (data) => {
     try {
-      await mutation.mutateAsync(data);
+      const dataToSubmit = {
+        ...data,
+        isExpansionForBggId: data.isExpansionFor.id,
+      };
+      await mutation.mutateAsync(dataToSubmit);
     } catch (error) {
       console.error(error);
     }
   };
-
-  console.log(formProps.watch());
 
   useEffect(() => {
     if (gameData) {

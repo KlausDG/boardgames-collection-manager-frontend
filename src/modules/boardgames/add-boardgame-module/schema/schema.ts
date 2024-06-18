@@ -21,7 +21,7 @@ export const AddBoardgameSchema = yup.object().shape({
   category: yup.string().required(),
   purchasedValue: yup.number().positive(),
   bestPlayerCount: yup.string(),
-  bggRank: yup.number().positive(),
+  bggRank: yup.number().positive().notRequired(),
   weight: yup.number().positive(),
   bggLink: yup.string().required("Bgg link is required"),
   bggId: yup.number(),
