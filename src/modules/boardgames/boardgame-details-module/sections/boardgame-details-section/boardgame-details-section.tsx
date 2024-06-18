@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Boardgame } from "@/interfaces";
+import { moneyFormatter } from "@/utils/helpers";
 import { Box, Modal, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 
@@ -41,7 +42,7 @@ export const BoardgameDetailsSetion = ({ boardgame, open, handleClose }: boardga
             <TitleRow boardgame={boardgame} />
 
             <Typography variant="caption" color="GrayText" component="div">
-              Purchased Value: R$ {boardgame?.purchasedValue}
+              Purchased Value: {moneyFormatter(boardgame?.purchasedValue)}
             </Typography>
 
             <InfoRow boardgame={boardgame} />

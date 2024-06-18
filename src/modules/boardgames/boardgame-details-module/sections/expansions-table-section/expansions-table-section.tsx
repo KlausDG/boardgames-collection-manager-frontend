@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Boardgame } from "@/interfaces";
+import { moneyFormatter } from "@/utils/helpers";
 import { Box, Link, Typography } from "@mui/material";
 import { DataGrid, GridRenderCellParams } from "@mui/x-data-grid";
 
@@ -37,7 +38,7 @@ export const ExpansionsTableSection = ({ expansions, isLoading = false }: Expans
       name: data.name,
       language: data.language,
       weight: data.weight,
-      purchasedValue: data.purchasedValue,
+      purchasedValue: moneyFormatter(data.purchasedValue),
       bggLink: data.bggLink,
     };
   };
