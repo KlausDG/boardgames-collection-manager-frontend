@@ -5,6 +5,7 @@ import { Box, Modal, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 
 import { DesignersRow, InfoRow, PublisherRow, TitleRow } from "../../components";
+import { ExpansionsTableSection } from "../expansions-table-section";
 
 type boardgameDetailsSetionProps = {
   boardgame: Boardgame | undefined;
@@ -18,6 +19,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, 0)",
   width: 1000,
+  height: "auto",
   bgcolor: "background.paper",
   border: "2px solid #f2f2f2",
   borderRadius: "10px",
@@ -48,7 +50,7 @@ export const BoardgameDetailsSetion = ({ boardgame, open, handleClose }: boardga
             <PublisherRow boardgame={boardgame} />
           </Grid>
 
-          {/* Adicionar expansões que estão na coleção */}
+          {!!boardgame?.expansions?.length && <ExpansionsTableSection expansions={boardgame?.expansions} />}
         </Grid>
       </Box>
     </Modal>

@@ -13,12 +13,13 @@ export type Boardgame = {
   minPlaytime: number;
   maxPlaytime: number;
   weight: number;
-  bggRank: number;
+  bggRank: number | null;
   bggLink: string;
   bggId: number;
   inCollection: boolean;
-  category: string;
-  purchasedValue: number;
+  purchasedValue: number | null;
   designers: Array<BaseFields>;
   publisher: BaseFields;
+  isExpansion: boolean;
+  expansions?: Array<Boardgame>;
 };

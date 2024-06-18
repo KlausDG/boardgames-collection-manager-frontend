@@ -1,4 +1,4 @@
-import "react-toastify/dist/ReactToastify.css"; // Import toastify CSS
+import "react-toastify/dist/ReactToastify.css";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
