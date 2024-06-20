@@ -9,7 +9,7 @@ export const registerSleeveType = async (dto: any) => {
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(JSON.stringify({ message: errorData.message, status: response.status }));
+    throw errorData;
   }
 
   return response.json();
