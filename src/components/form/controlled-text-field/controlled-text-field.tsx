@@ -1,26 +1,24 @@
 import React from "react";
 
-import { Control, Controller } from "react-hook-form";
+import { Control, Controller, FieldValues, Path } from "react-hook-form";
 
 import { Skeleton, TextField, TextFieldProps } from "@mui/material";
 
-import { AddBoardgame } from "../../schema";
-
-type ControlledTextFieldProps = {
-  control: Control<AddBoardgame>;
+type ControlledTextFieldProps<T extends FieldValues> = {
+  control: Control<T>;
   isLoading?: boolean;
-  name: keyof AddBoardgame;
+  name: Path<T>;
   skeletonHeight?: string | number;
 } & TextFieldProps;
 
-export const ControlledTextField = ({
+export const ControlledTextField = <T extends FieldValues>({
   control,
   isLoading = false,
   name,
   label,
   skeletonHeight = 56,
   ...props
-}: ControlledTextFieldProps) => {
+}: ControlledTextFieldProps<T>) => {
   return isLoading ? (
     <Skeleton animation="wave" height={skeletonHeight} />
   ) : (

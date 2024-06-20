@@ -1,9 +1,9 @@
 import React from "react";
 
 import { CardContainer } from "@/components";
+import { ControlledTextField } from "@/components/form";
 import Grid from "@mui/material/Unstable_Grid2";
 
-import { ControlledTextField } from "../../components";
 import { useAddBoardgameForm } from "../../providers";
 
 export const AditionalInformationsSection = () => {
