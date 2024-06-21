@@ -9,7 +9,7 @@ export const AddSleeveTypeForm = () => {
   const { control, handleSubmit } = useSleeveTypeForm();
 
   return (
-    <CardContainer sx={{ padding: "18px", maxWidth: "30vw" }}>
+    <CardContainer>
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <Box display="flex" justifyContent="space-between">
           <Typography variant="h6">Add new Sleeve Type</Typography>
