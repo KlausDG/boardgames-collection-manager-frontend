@@ -4,7 +4,7 @@ import { fetchSleeveBrands } from "../../repository";
 
 export const useSleeveBrands = (enable: boolean = true) => {
   return useQuery({
-    queryKey: ["sleeveBrands"],
+    queryKey: ["sleeve", "sleeve-brands"],
     queryFn: fetchSleeveBrands,
     enabled: enable,
   });

@@ -4,7 +4,7 @@ import { fetchSleeveCategories } from "../../repository";
 
 export const useSleeveCategories = (enable: boolean = true) => {
   return useQuery({
-    queryKey: ["sleeveCategories"],
+    queryKey: ["sleeve", "sleeve-categories"],
     queryFn: fetchSleeveCategories,
     enabled: enable,
   });
