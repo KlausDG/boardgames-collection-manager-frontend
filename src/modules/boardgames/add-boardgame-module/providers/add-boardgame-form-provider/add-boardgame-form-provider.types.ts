@@ -1,4 +1,4 @@
-import { SubmitHandler, UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
 
 import { AddBoardgame } from "../../schema";
 
@@ -8,9 +8,10 @@ type Designer = {
 };
 
 type Form = {
-  submit: SubmitHandler<AddBoardgame>;
+  searchBggId: () => void;
+  handleSubmit: (e?: React.BaseSyntheticEvent<object, any, any> | undefined) => Promise<void>;
   success: boolean;
-  error: Error | null;
+  error: any;
   reset: () => void;
   loading: boolean;
 };

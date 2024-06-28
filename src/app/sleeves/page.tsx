@@ -1,6 +1,6 @@
 "use client";
 
-import { AddSleeveProductForm } from "@/modules/sleeve-products";
+import { AddSleeveProductForm, SleeveProductsTable } from "@/modules/sleeve-products";
 import { AddSleeveSizeForm, SleeveSizeTable } from "@/modules/sleeve-sizes";
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -15,8 +15,11 @@ export default function Boardgames() {
             <SleeveSizeTable />
           </Box>
         </Grid>
-        <Grid xs={3}>
-          <AddSleeveProductForm />
+        <Grid xs={6}>
+          <Box display="flex" flexDirection={"column"} gap={2}>
+            <AddSleeveProductForm />
+            <SleeveProductsTable />
+          </Box>
         </Grid>
       </Grid>
     </>

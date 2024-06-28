@@ -5,10 +5,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { SleeveSizeSchema } from "../../dto";
 import { registerSleeveSize } from "../../repository";
-import { SleeveSize } from "../../types";
+import { SleeveSizeFormData } from "../../types";
 
 export const useSleeveSizeForm = () => {
-  const { control, handleSubmit, setError, reset } = useForm<SleeveSize>({
+  const { control, handleSubmit, setError, reset } = useForm<SleeveSizeFormData>({
     resolver: yupResolver(SleeveSizeSchema),
     defaultValues: {
       name: "",
@@ -19,7 +19,7 @@ export const useSleeveSizeForm = () => {
 
   const mutation = useGenericMutation(registerSleeveSize, setError, { queryKey: ["sleeve", "sleeve-sizes"] });
 
-  const onSubmit = async (data: SleeveSize) => {
+  const onSubmit = async (data: SleeveSizeFormData) => {
     try {
       await mutation.mutateAsync(data);
       reset();

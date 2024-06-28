@@ -1,8 +1,8 @@
 import * as yup from "yup";
 
 const DefaultPropertiesSchema = yup.object().shape({
-  id: yup.number().required(),
-  value: yup.string().required(),
+  id: yup.number(),
+  value: yup.string(),
 });
 
 export const AddBoardgameSchema = yup.object().shape({
@@ -19,7 +19,7 @@ export const AddBoardgameSchema = yup.object().shape({
   publisher: yup.string().required(),
   inCollection: yup.boolean().default(true),
   category: yup.string().required(),
-  purchasedValue: yup.number().positive(),
+  purchasedValue: yup.number(),
   bestPlayerCount: yup.string(),
   bggRank: yup.number().positive().notRequired(),
   weight: yup.number().positive(),

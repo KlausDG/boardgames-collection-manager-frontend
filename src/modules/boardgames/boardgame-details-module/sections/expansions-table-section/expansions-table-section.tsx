@@ -15,7 +15,7 @@ export const ExpansionsTableSection = ({ expansions, isLoading = false }: Expans
     { field: "name", headerName: "Name", width: 350 },
     { field: "language", headerName: "Language", width: 120 },
     { field: "weight", headerName: "Weight" },
-    { field: "purchasedValue", headerName: "Purchased Value", width: 150 },
+    { field: "purchasedPrice", headerName: "Purchased Value", width: 150 },
     {
       field: "bggLink",
       headerName: "BGG",
@@ -38,13 +38,13 @@ export const ExpansionsTableSection = ({ expansions, isLoading = false }: Expans
       name: data.name,
       language: data.language,
       weight: data.weight,
-      purchasedValue: moneyFormatter(data.purchasedValue),
+      purchasedPrice: moneyFormatter(data.purchasedPrice),
       bggLink: data.bggLink,
     };
   };
 
   return (
-    <Box sx={{ height: 300, width: "100%" }}>
+    <Box sx={{ height: 315, width: "100%" }}>
       <Typography variant="h6">Expansões:</Typography>
       <Box sx={{ height: "calc(100% - 40px)" }}>
         <DataGrid

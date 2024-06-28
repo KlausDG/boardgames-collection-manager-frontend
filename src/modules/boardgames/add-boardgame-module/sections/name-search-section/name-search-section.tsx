@@ -1,7 +1,8 @@
 import React from "react";
 
 import { CardContainer } from "@/components";
-import { Box } from "@mui/material";
+import { ControlledTextField } from "@/components/form";
+import { Box, Button } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 
 import { NameInput } from "../../components";
@@ -13,6 +14,7 @@ export const NameSearchSection = () => {
     setValue,
     updateGameNameObject,
     formState: { errors },
+    form,
   } = useAddBoardgameForm();
 
   return (
@@ -25,6 +27,10 @@ export const NameSearchSection = () => {
             setNameObject={updateGameNameObject}
             error={errors?.name}
           />
+          <ControlledTextField control={control} name="bggId" label="Bgg ID" isLoading={form.loading} />
+          <Button variant="contained" onClick={form.searchBggId}>
+            Search
+          </Button>
         </Box>
       </CardContainer>
     </Grid>

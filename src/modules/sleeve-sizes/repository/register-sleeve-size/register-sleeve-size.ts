@@ -1,6 +1,6 @@
-import { SleeveSize } from "../../types";
+import { SleeveSizeFormData } from "../../types";
 
-export const registerSleeveSize = async (dto: SleeveSize): Promise<SleeveSize> => {
+export const registerSleeveSize = async (dto: SleeveSizeFormData): Promise<SleeveSizeFormData> => {
   const response = await fetch(`http://localhost:3000/sleeves/sizes`, {
     method: "POST",
     headers: {

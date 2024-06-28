@@ -42,7 +42,7 @@ export const BoardgameDetailsSetion = ({ boardgame, open, handleClose }: boardga
             <TitleRow boardgame={boardgame} />
 
             <Typography variant="caption" color="GrayText" component="div">
-              Purchased Value: {moneyFormatter(boardgame?.purchasedValue)}
+              Purchased Value: {moneyFormatter(boardgame?.purchasedPrice)}
             </Typography>
 
             <InfoRow boardgame={boardgame} />

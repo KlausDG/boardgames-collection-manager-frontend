@@ -3,14 +3,16 @@ import "react-toastify/dist/ReactToastify.css";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 
+import { useGenericMutation } from "@/hooks";
 import { WithChildren } from "@/utils/types";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { ConfirmationModal } from "../../components";
-import { useAdditionalGameData, useCheckGameInstance, useDesigners, useGameData, useRegisterGame } from "../../hooks";
+import { useAdditionalGameData, useCheckGameInstance, useDesigners, useGameData } from "../../hooks";
+import { registerGame } from "../../repository";
 import { AddBoardgame, AddBoardgameSchema, DefaultProperties } from "../../schema";
 import { AddBoardgameFormContextValue } from "./add-boardgame-form-provider.types";
 
@@ -36,7 +38,7 @@ const defaultValues = {
   weight: undefined,
   bggLink: "",
   bggId: undefined,
-  isExpansionFor: {} as DefaultProperties,
+  isExpansionFor: undefined,
 };
 
 export const AddBoardgameFormProvider = ({ children }: WithChildren) => {
@@ -61,19 +63,12 @@ export const AddBoardgameFormProvider = ({ children }: WithChildren) => {
     isLoading: isFetchingAditionalGameData,
   } = useAdditionalGameData(gameNameObject.id);
 
-  const mutation = useRegisterGame(setModalOpen, formProps.setError);
+  console.log(formProps.watch("designers"));
 
-  const onSubmit: SubmitHandler<AddBoardgame> = async (data) => {
-    try {
-      const dataToSubmit = {
-        ...data,
-        isExpansionForBggId: data.isExpansionFor.id,
-      };
-      await mutation.mutateAsync(dataToSubmit);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const mutation = useGenericMutation(registerGame, formProps.setError, {
+    queryKey: ["boardgames"],
+    onSuccess: () => setModalOpen(true),
+  });
 
   useEffect(() => {
     if (gameData) {
@@ -81,6 +76,7 @@ export const AddBoardgameFormProvider = ({ children }: WithChildren) => {
 
       formProps.reset({
         ...currentValues,
+        name: gameData.name,
         thumbnail: gameData.thumbnail,
         description: gameData.description,
         yearPublished: gameData.yearPublished,
@@ -110,11 +106,11 @@ export const AddBoardgameFormProvider = ({ children }: WithChildren) => {
   }, [aditionalGameData]);
 
   useEffect(() => {
-    if (!!gameNameObject.value && alreadyInDatabase === false) {
+    if (!!gameNameObject.id && alreadyInDatabase === false) {
       fetchGameData();
       fetchAditionalGameData();
     }
-  }, [alreadyInDatabase, gameNameObject.value]);
+  }, [alreadyInDatabase, gameNameObject.value, gameNameObject.id]);
 
   useEffect(() => {
     if (alreadyInDatabase) {
@@ -146,6 +142,26 @@ export const AddBoardgameFormProvider = ({ children }: WithChildren) => {
     reloadPage();
   };
 
+  const onSubmit = async (data: AddBoardgame) => {
+    try {
+      const dataToSubmit = {
+        ...data,
+        isExpansionForBggId: data.isExpansionFor.id,
+      };
+      await mutation.mutateAsync(dataToSubmit);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onInvalid = (errors: any) => console.error(errors);
+
+  const searchBggId = () => {
+    const bggId = formProps.getValues("bggId");
+
+    setGameNameObject({ value: "", id: bggId ? bggId?.toString() : "" });
+  };
+
   const value = {
     publishers,
     gameNameObject,
@@ -155,7 +171,8 @@ export const AddBoardgameFormProvider = ({ children }: WithChildren) => {
       list: designers,
     },
     form: {
-      submit: onSubmit,
+      searchBggId,
+      handleSubmit: formProps.handleSubmit(onSubmit, onInvalid),
       success: mutation.isSuccess,
       error: mutation.error,
       reset: mutation.reset,

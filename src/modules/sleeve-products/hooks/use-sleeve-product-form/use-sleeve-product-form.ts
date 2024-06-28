@@ -8,14 +8,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { SleeveProductSchema } from "../../dto";
 import { registerSleeveProduct } from "../../repository";
-import { SleeveProduct } from "../../types";
+import { SleeveProductFormData } from "../../types";
 
 export const useSleeveProductForm = () => {
   const { data: categories } = useSleeveCategories();
   const { data: brands } = useSleeveBrands();
   const { isLoading: isLoadingSleeveSizes, getFormattedArray, findByName } = useSleeveSizes();
 
-  const { control, handleSubmit, setError, reset } = useForm<SleeveProduct>({
+  const { control, handleSubmit, setError, reset } = useForm<SleeveProductFormData>({
     resolver: yupResolver(SleeveProductSchema),
     defaultValues: {
       brand: "",
@@ -29,7 +29,7 @@ export const useSleeveProductForm = () => {
     queryKey: ["sleeve"],
   });
 
-  const onSubmit = async (data: SleeveProduct) => {
+  const onSubmit = async (data: SleeveProductFormData) => {
     try {
       const formattedFormData = {
         ...data,

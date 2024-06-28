@@ -26,11 +26,11 @@ export const NameInput = ({ control, setFormValue, setNameObject, error }: Autoc
             selectValue(null);
             updateInput(newInputValue);
           }}
-          options={isLoading ? [] : options ?? []}
+          options={options}
+          disablePortal
           autoComplete
           freeSolo
           fullWidth
-          loading={isLoading}
           getOptionLabel={(option) => (typeof option === "string" ? option : option.value)}
           isOptionEqualToValue={(option, value) =>
             typeof option === "string" || typeof value === "string" ? option === value : option.value === value.value

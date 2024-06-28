@@ -20,80 +20,80 @@ export const AddSleeveProductForm = () => {
           </Button>
         </Box>
         <Grid container spacing={2} sx={{ marginTop: "12px" }}>
-          <Grid container>
-            <Grid xs={12}>
+          <Grid xs={8}>
+            <Controller
+              name="brand"
+              control={control}
+              render={({ field }) => (
+                <Autocomplete
+                  {...field}
+                  id="brand"
+                  autoComplete
+                  freeSolo
+                  disableClearable
+                  options={brands}
+                  onChange={(_, value) => field.onChange(value)}
+                  getOptionLabel={(option) => option}
+                  isOptionEqualToValue={(option, value) => option === value}
+                  onInputChange={(_, newInputValue) => field.onChange(newInputValue)}
+                  renderInput={(params) => <TextField {...params} label="Brand Name" size="small" />}
+                />
+              )}
+            />
+          </Grid>
+          <Grid xs={4}>
+            <Controller
+              name="category"
+              control={control}
+              render={({ field }) => (
+                <Autocomplete
+                  {...field}
+                  id="category"
+                  size="small"
+                  autoComplete
+                  disableClearable
+                  options={categories || []}
+                  getOptionLabel={(option) => option}
+                  isOptionEqualToValue={(option, value) => option === value}
+                  onChange={(_, value) => field.onChange(value)}
+                  renderInput={(params) => <TextField {...params} label="Thickness" />}
+                />
+              )}
+            />
+          </Grid>
+
+          <Grid xs={8}>
+            {sizes.loading ? (
+              <Skeleton height={56} />
+            ) : (
               <Controller
-                name="brand"
+                name="size"
                 control={control}
                 render={({ field }) => (
                   <Autocomplete
                     {...field}
-                    id="brand"
+                    id="size"
                     autoComplete
                     freeSolo
                     disableClearable
-                    options={brands}
+                    options={sizes.values}
                     onChange={(_, value) => field.onChange(value)}
-                    getOptionLabel={(option) => option}
-                    isOptionEqualToValue={(option, value) => option === value}
-                    onInputChange={(_, newInputValue) => field.onChange(newInputValue)}
-                    renderInput={(params) => <TextField {...params} label="Brand Name" size="small" />}
+                    renderInput={(params) => <TextField {...params} label="Size" size="small" />}
                   />
                 )}
               />
-            </Grid>
-            <Grid xs={12}>
-              {sizes.loading ? (
-                <Skeleton height={56} />
-              ) : (
-                <Controller
-                  name="size"
-                  control={control}
-                  render={({ field }) => (
-                    <Autocomplete
-                      {...field}
-                      id="size"
-                      autoComplete
-                      freeSolo
-                      disableClearable
-                      options={sizes.values}
-                      onChange={(_, value) => field.onChange(value)}
-                      renderInput={(params) => <TextField {...params} label="Size" size="small" />}
-                    />
-                  )}
-                />
-              )}
-            </Grid>
-            <Grid xs={6}>
-              <Controller
-                name="category"
-                control={control}
-                render={({ field }) => (
-                  <Autocomplete
-                    {...field}
-                    id="category"
-                    size="small"
-                    autoComplete
-                    disableClearable
-                    options={categories || []}
-                    getOptionLabel={(option) => option}
-                    isOptionEqualToValue={(option, value) => option === value}
-                    onChange={(_, value) => field.onChange(value)}
-                    renderInput={(params) => <TextField {...params} label="Thickness" />}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid xs={6}>
-              <ControlledTextField
-                control={control}
-                name="sleevesPerPack"
-                label="Pack's Quantity"
-                type="number"
-                size="small"
-                isLoading={false}
-              />
-            </Grid>
+            )}
+          </Grid>
+
+          <Grid xs={4}>
+            <ControlledTextField
+              control={control}
+              name="sleevesPerPack"
+              label="Pack's Quantity"
+              type="number"
+              size="small"
+              isLoading={false}
+            />
           </Grid>
         </Grid>
       </Box>

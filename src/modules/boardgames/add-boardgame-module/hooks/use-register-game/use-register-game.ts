@@ -1,5 +1,3 @@
-import { toast } from "react-toastify";
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { registerGame } from "../../repository/register-game";
@@ -16,7 +14,6 @@ export const useRegisterGame = (setModalOpen: (open: boolean) => void, setError:
     },
     onError: (error: Error) => {
       const errorData = JSON.parse(error.message);
-      toast.error(errorData.message);
       if (!!errorHandler) {
         errorHandler();
       }
