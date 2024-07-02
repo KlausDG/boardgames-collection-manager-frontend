@@ -19,7 +19,9 @@ export type Boardgame = {
   inCollection: boolean;
   purchasedPrice: number | null;
   designers: Array<BaseFields>;
+  mechanics: Array<BaseFields>;
   publisher: BaseFields;
   isExpansion: boolean;
   expansions?: Array<Boardgame>;
+  languageDependence: string;
 };
