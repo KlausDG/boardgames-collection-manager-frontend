@@ -45,7 +45,7 @@ export const ExpansionsTableSection = ({ expansions, isLoading = false }: Expans
 
   return (
     <Box sx={{ height: 315, width: "100%" }}>
-      <Typography variant="h6">Expansões:</Typography>
+      <Typography variant="h6">Expansions:</Typography>
       <Box sx={{ height: "calc(100% - 40px)" }}>
         <DataGrid
           columns={columns}
