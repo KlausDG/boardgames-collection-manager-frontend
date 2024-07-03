@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Boardgame } from "@/interfaces";
+import { MechanicsList } from "@/modules/mechanics";
 import { moneyFormatter } from "@/utils/helpers";
 import { Box, Modal, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -31,6 +32,8 @@ const style = {
 };
 
 export const BoardgameDetailsSetion = ({ boardgame, open, handleClose }: boardgameDetailsSetionProps) => {
+  console.log(boardgame);
+
   return (
     <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
@@ -50,6 +53,8 @@ export const BoardgameDetailsSetion = ({ boardgame, open, handleClose }: boardga
             <DesignersRow boardgame={boardgame} />
             <PublisherRow boardgame={boardgame} />
           </Grid>
+
+          <div>{!!boardgame?.mechanics?.length && <MechanicsList mechanics={boardgame.mechanics} />}</div>
 
           {!!boardgame?.expansions?.length && <ExpansionsTableSection expansions={boardgame?.expansions} />}
         </Grid>
