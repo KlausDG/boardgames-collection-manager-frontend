@@ -35,7 +35,11 @@ export const usePdf = () => {
 
     const filteredGames = boardgames
       .filter((game) => players.some((count) => game.bestPlayerCount.includes(count)))
-      .sort((a, b) => a.bggRank! - b.bggRank!);
+      .sort((a, b) => {
+        if (a.bggRank === 0) return 1;
+        if (b.bggRank === 0) return -1;
+        return a.bggRank! - b.bggRank!;
+      });
 
     for (const game of filteredGames) {
       const mechanicsText = game.mechanics.map((item) => item.name).join(", ");
