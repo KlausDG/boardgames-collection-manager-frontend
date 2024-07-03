@@ -1,0 +1,10 @@
+export const PAGE_HEIGHT = 800;
+export const PAGE_WIDTH = 600;
+export const MARGIN = 50;
+export const COLUMN_WIDTH = (PAGE_WIDTH - MARGIN * 3) / 7;
+export const LINE_HEIGHT_LG = 50;
+export const LINE_HEIGHT_MD = 30;
+export const LINE_HEIGHT_SM = 15;
+export const IMAGE_HEIGHT = 50;
+export const TEXT_SIZE = 12;
+export const MAX_TEXT_WIDTH = 700;
