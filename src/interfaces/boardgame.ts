@@ -1,3 +1,4 @@
+import { Mechanics } from "@/modules/mechanics";
 import { BaseFields } from "@/utils/types";
 
 export type Boardgame = {
@@ -19,7 +20,7 @@ export type Boardgame = {
   inCollection: boolean;
   purchasedPrice: number | null;
   designers: Array<BaseFields>;
-  mechanics: Array<BaseFields>;
+  mechanics: Mechanics;
   publisher: BaseFields;
   isExpansion: boolean;
   expansions?: Array<Boardgame>;
