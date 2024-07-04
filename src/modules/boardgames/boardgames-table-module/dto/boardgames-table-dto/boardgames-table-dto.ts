@@ -12,7 +12,7 @@ const columns = [
 
 const boardgamesTableDto = (boardgames: Array<Boardgame> | undefined) => {
   if (!boardgames) return [];
-  return boardgames.map((boardgame) => formatBoardgame(boardgame));
+  return boardgames?.map((boardgame) => formatBoardgame(boardgame));
 };
 
 const formatBoardgame = (data: Boardgame) => {
