@@ -1,8 +1,9 @@
 import React from "react";
 
 import { Boardgame } from "@/interfaces";
+import { MechanicsList } from "@/modules/mechanics";
 import { moneyFormatter } from "@/utils/helpers";
-import { Box, Modal, Typography } from "@mui/material";
+import { Box, Modal, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 
 import { DesignersRow, InfoRow, PublisherRow, TitleRow } from "../../components";
@@ -51,7 +52,10 @@ export const BoardgameDetailsSetion = ({ boardgame, open, handleClose }: boardga
             <PublisherRow boardgame={boardgame} />
           </Grid>
 
-          {!!boardgame?.expansions?.length && <ExpansionsTableSection expansions={boardgame?.expansions} />}
+          <Stack spacing={2}>
+            {!!boardgame?.mechanics?.length && <MechanicsList mechanics={boardgame.mechanics} />}
+            {!!boardgame?.expansions?.length && <ExpansionsTableSection expansions={boardgame?.expansions} />}
+          </Stack>
         </Grid>
       </Box>
     </Modal>
