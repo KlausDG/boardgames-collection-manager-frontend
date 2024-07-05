@@ -4,14 +4,14 @@ import { Controller } from "react-hook-form";
 
 import { CardContainer } from "@/components";
 import { MoneyInput } from "@/components/form";
-import { languages } from "@/utils/constants";
-import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from "@mui/material";
+import { languageDependences, languages } from "@/utils/constants";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 
 import { useAddBoardgameForm } from "../../providers";
 
 export const UntrackedInformationsSection = () => {
-  const { register, control } = useAddBoardgameForm();
+  const { control } = useAddBoardgameForm();
 
   return (
     <CardContainer>
@@ -37,6 +37,33 @@ export const UntrackedInformationsSection = () => {
 
         <Grid xs={6}>
           <Controller
+            name="languageDependence"
+            control={control}
+            render={({ field }) => (
+              <FormControl fullWidth size="small">
+                <InputLabel id="languageDependence-label">Language Dependence</InputLabel>
+                <Select id="languageDependence" {...field}>
+                  {languageDependences.map((item) => (
+                    <MenuItem key={item} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
+        </Grid>
+
+        <Grid xs={6}>
+          <Controller
+            name="purchasedPrice"
+            control={control}
+            render={({ field }) => <MoneyInput label="Purchased Price" {...field} />}
+          />
+        </Grid>
+
+        <Grid xs={6}>
+          <Controller
             name="category"
             control={control}
             render={({ field }) => (
@@ -52,23 +79,6 @@ export const UntrackedInformationsSection = () => {
               </FormControl>
             )}
           />
-        </Grid>
-
-        <Grid xs={6}>
-          <Controller
-            name="purchasedValue"
-            control={control}
-            render={({ field }) => <MoneyInput label="Purchased Value" {...field} />}
-          />
-        </Grid>
-
-        <Grid xs={6}>
-          <FormControl fullWidth>
-            <FormControlLabel
-              control={<Checkbox defaultChecked {...register("inCollection")} />}
-              label="In Collection"
-            />
-          </FormControl>
         </Grid>
       </Grid>
     </CardContainer>

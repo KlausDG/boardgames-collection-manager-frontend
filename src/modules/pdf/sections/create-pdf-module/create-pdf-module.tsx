@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { CardContainer } from "@/components";
-import { Boardgame } from "@/interfaces";
+import { useFetchBoardgames } from "@/modules/boardgames/boardgames-table-module/hooks";
 import { Box, Button, Checkbox, FormControlLabel, FormGroup, FormLabel, Modal } from "@mui/material";
 
 import { usePdf } from "../../hooks";
@@ -18,9 +18,10 @@ const style = {
   p: 4,
 };
 
-export const CreatePdfModule = ({ boardgames }: { boardgames: Array<Boardgame> }) => {
+export const CreatePdfModule = () => {
   const [players, setPlayers] = useState<number[]>([]);
   const [open, setOpen] = useState(false);
+  const { data: boardgames } = useFetchBoardgames();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
