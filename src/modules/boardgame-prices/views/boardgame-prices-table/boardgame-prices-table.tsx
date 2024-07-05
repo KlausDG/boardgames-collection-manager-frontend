@@ -1,7 +1,5 @@
 import React from "react";
 
-import { title } from "process";
-
 import { CardContainer } from "@/components";
 import { useFetchBoardgames } from "@/modules/boardgames/boardgames-table-module/hooks";
 import { Stack, Typography } from "@mui/material";
@@ -15,7 +13,7 @@ export const BoardgamePricesTable = () => {
   return (
     <CardContainer sx={{ padding: "24px" }}>
       <Stack spacing={1}>
-        <Typography variant="h6">{title}</Typography>
+        <Typography variant="h6">Boardgame Purchased Prices</Typography>
         <DataGrid
           columns={columns}
           rows={boardgamePricesTableDto(boardgames)}

@@ -28,7 +28,7 @@ const defaultValues = {
   maxPlayers: undefined,
   minPlaytime: undefined,
   maxPlaytime: undefined,
-  purchasedValue: undefined,
+  purchasedPrice: undefined,
   designers: [],
   publisher: "",
   inCollection: true,
@@ -38,6 +38,7 @@ const defaultValues = {
   weight: undefined,
   bggLink: "",
   bggId: undefined,
+  languageDependence: "NO",
   isExpansionFor: undefined,
 };
 
@@ -62,8 +63,6 @@ export const AddBoardgameFormProvider = ({ children }: WithChildren) => {
     refetch: fetchAditionalGameData,
     isLoading: isFetchingAditionalGameData,
   } = useAdditionalGameData(gameNameObject.id);
-
-  console.log(formProps.watch("designers"));
 
   const mutation = useGenericMutation(registerGame, formProps.setError, {
     queryKey: ["boardgames"],
@@ -148,6 +147,7 @@ export const AddBoardgameFormProvider = ({ children }: WithChildren) => {
         ...data,
         isExpansionForBggId: data.isExpansionFor.id,
       };
+
       await mutation.mutateAsync(dataToSubmit);
     } catch (error) {
       console.error(error);
