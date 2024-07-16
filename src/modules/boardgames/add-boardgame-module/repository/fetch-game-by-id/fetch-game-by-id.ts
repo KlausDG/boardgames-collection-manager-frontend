@@ -8,6 +8,7 @@ type BoardgameData = {
   minPlaytime: number;
   maxPlaytime: number;
   designers: Array<string>;
+  mechanics: Array<string>;
   publishers: Array<string>;
   isExpansion: boolean;
   isExpansionFor: Array<{

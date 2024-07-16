@@ -1,5 +1,5 @@
 type InnerWeightType = {
-  weigth: number;
+  weight: number;
 };
 
 export type WeightReportResponse = {

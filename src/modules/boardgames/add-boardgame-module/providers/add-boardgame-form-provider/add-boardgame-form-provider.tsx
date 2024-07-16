@@ -30,6 +30,7 @@ const defaultValues = {
   maxPlaytime: undefined,
   purchasedPrice: undefined,
   designers: [],
+  mechanics: [],
   publisher: "",
   inCollection: true,
   category: "Boardgame",
@@ -54,6 +55,8 @@ export const AddBoardgameFormProvider = ({ children }: WithChildren) => {
     resolver: yupResolver(AddBoardgameSchema),
     defaultValues,
   });
+
+  console.log(formProps.watch());
 
   const { data: designers = [], isLoading: isFetchingDesigners } = useDesigners();
   const { data: alreadyInDatabase, isLoading: isCheckingGameInstance } = useCheckGameInstance(gameNameObject.id);
@@ -84,6 +87,7 @@ export const AddBoardgameFormProvider = ({ children }: WithChildren) => {
         minPlaytime: gameData.minPlaytime,
         maxPlaytime: gameData.maxPlaytime,
         designers: gameData.designers,
+        mechanics: gameData.mechanics,
         publisher: gameData.publishers[0],
         isExpansion: gameData.isExpansion,
         bggId: Number(gameNameObject.id),
