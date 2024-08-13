@@ -2,6 +2,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
+import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
@@ -29,6 +30,7 @@ const defaultValues = {
   minPlaytime: undefined,
   maxPlaytime: undefined,
   purchasedPrice: undefined,
+  acquisitionDate: dayjs(),
   designers: [],
   mechanics: [],
   publisher: "",

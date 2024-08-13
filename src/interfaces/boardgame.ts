@@ -19,6 +19,7 @@ export type Boardgame = {
   bggId: number;
   inCollection: boolean;
   purchasedPrice: number | null;
+  acquisitionDate: Date;
   designers: Array<BaseFields>;
   mechanics: Mechanics;
   publisher: BaseFields;

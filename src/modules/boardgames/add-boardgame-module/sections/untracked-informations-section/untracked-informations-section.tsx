@@ -1,5 +1,6 @@
 import React from "react";
 
+import dayjs from "dayjs";
 import { Controller } from "react-hook-form";
 
 import { CardContainer } from "@/components";
@@ -7,6 +8,7 @@ import { MoneyInput } from "@/components/form";
 import { languageDependences, languages } from "@/utils/constants";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
+import { DatePicker } from "@mui/x-date-pickers";
 
 import { useAddBoardgameForm } from "../../providers";
 
@@ -77,6 +79,15 @@ export const UntrackedInformationsSection = () => {
                   ))}
                 </Select>
               </FormControl>
+            )}
+          />
+        </Grid>
+        <Grid xs={6}>
+          <Controller
+            name="acquisitionDate"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <DatePicker onChange={onChange} value={value} defaultValue={dayjs()} />
             )}
           />
         </Grid>

@@ -36,6 +36,9 @@ export const BoardgamesTable = ({ title = "Boardgames", filter }: BoardgamesTabl
                 pageSize: 10,
               },
             },
+            sorting: {
+              sortModel: [{ field: "acquisitionDate", sort: "desc" }],
+            },
           }}
           pageSizeOptions={[10]}
         />

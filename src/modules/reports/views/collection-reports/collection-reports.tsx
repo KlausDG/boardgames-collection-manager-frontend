@@ -1,7 +1,8 @@
+"use client";
 import React from "react";
 
 import { CardContainer } from "@/components";
-import { Box, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
+import { Box, Skeleton, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 
 import { InfoCard } from "../../components";
 import { useWeightReport } from "../../hooks";
@@ -23,19 +24,26 @@ export const CollectionReports = () => {
 
         <Box>
           <Typography variant="h6">Boardgames by weight</Typography>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                {!!data &&
-                  Object.keys(data?.countInRange).map((value) => <TableCell>{value.replace("_", " - ")}</TableCell>)}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                {!!data && Object.values(data?.countInRange).map((value) => <TableCell>{value}</TableCell>)}
-              </TableRow>
-            </TableBody>
-          </Table>
+          {!data ? (
+            <Skeleton variant="text" />
+          ) : (
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  {!!data &&
+                    Object.keys(data?.countInRange).map((value) => (
+                      <TableCell key={value}>{value.replace("_", " - ")}</TableCell>
+                    ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                  {!!data &&
+                    Object.values(data?.countInRange).map((value) => <TableCell key={value}>{value}</TableCell>)}
+                </TableRow>
+              </TableBody>
+            </Table>
+          )}
         </Box>
       </Stack>
     </CardContainer>

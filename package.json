@@ -17,11 +17,14 @@
     "@mui/material": "^5.15.18",
     "@mui/material-nextjs": "^5.15.11",
     "@mui/x-data-grid": "^7.6.2",
+    "@mui/x-date-pickers": "^7.11.1",
     "@radix-ui/react-dialog": "^1.0.5",
     "@tanstack/react-query": "^5.36.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
+    "dayjs": "^1.11.12",
+    "file-saver": "^2.0.5",
     "html2canvas": "^1.4.1",
     "image-to-base64": "^2.2.0",
     "install": "^0.13.0",
@@ -37,6 +40,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

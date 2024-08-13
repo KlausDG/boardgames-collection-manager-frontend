@@ -1,4 +1,16 @@
+// @ts-nocheck
+
+import dayjs from "dayjs";
 import * as yup from "yup";
+
+yup.addMethod(yup.object, "dayjs", function method(message) {
+  return this.test("dayjs", message, function validate(value) {
+    if (!value) {
+      return true;
+    }
+    return dayjs.isDayjs(value);
+  });
+});
 
 const DefaultPropertiesSchema = yup.object().shape({
   id: yup.number(),
@@ -21,6 +33,7 @@ export const AddBoardgameSchema = yup.object().shape({
   inCollection: yup.boolean().default(true),
   category: yup.string().required(),
   purchasedPrice: yup.number(),
+  acquisitionDate: yup.object().nullable().dayjs("Date of birth is invalid"),
   bestPlayerCount: yup.string().notRequired(),
   bggRank: yup.number().positive().notRequired(),
   weight: yup.number().positive(),

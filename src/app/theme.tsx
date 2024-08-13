@@ -1,6 +1,7 @@
 "use client";
 import { Roboto } from "next/font/google";
 
+import { grey } from "@mui/material/colors";
 import { createTheme } from "@mui/material/styles";
 
 const roboto = Roboto({
@@ -12,8 +13,16 @@ const roboto = Roboto({
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
+    common: {
+      white: "#6A6970",
+      black: "#6A6970",
+    },
+    text: {
+      primary: grey[400],
+      secondary: grey[500],
+    },
     primary: {
-      main: "#6A6970",
+      main: grey[700],
       contrastText: "#D0D0D1",
     },
     secondary: {

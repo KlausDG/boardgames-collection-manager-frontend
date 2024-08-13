@@ -1,7 +1,11 @@
 "use client";
+import "dayjs/locale/pt-br";
+
 import Link from "next/link";
 
 import { Box, Drawer, List, ListItem, ListItemText } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const drawerWidth = 240;
 
@@ -36,7 +40,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </Box>
       </Drawer>
       <Box component="main" width="100%" padding="24px">
-        {children}
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
+          {children}
+        </LocalizationProvider>
       </Box>
     </Box>
   );
