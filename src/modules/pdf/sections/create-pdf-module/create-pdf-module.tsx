@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 
 import { CardContainer } from "@/components";
-import { useFetchBoardgames } from "@/modules/boardgames/boardgames-table-module/hooks";
-import { Box, Button, Checkbox, FormControlLabel, FormGroup, FormLabel, Modal } from "@mui/material";
+import { Box, Button, ButtonGroup, FormGroup, FormLabel, Modal } from "@mui/material";
 
 import { usePdf } from "../../hooks";
 
@@ -19,29 +18,12 @@ const style = {
 };
 
 export const CreatePdfModule = () => {
-  const [players, setPlayers] = useState<number[]>([]);
   const [open, setOpen] = useState(false);
-  const { data: boardgames } = useFetchBoardgames();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const { generateBoardgamePDF } = usePdf();
-
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = event.target;
-    const valueNumber = parseInt(value, 10);
-    setPlayers((prevSelectedPlayers) =>
-      checked ? [...prevSelectedPlayers, valueNumber] : prevSelectedPlayers.filter((player) => player !== valueNumber)
-    );
-  };
-
-  const handleSubmit = () => {
-    generateBoardgamePDF(boardgames, players);
-
-    handleClose();
-    setPlayers([]);
-  };
 
   return (
     <CardContainer>
@@ -56,27 +38,17 @@ export const CreatePdfModule = () => {
         <Box sx={style}>
           <FormLabel component="legend">Select Players Amount</FormLabel>
           <FormGroup row>
-            {[...Array(7)].map((_, index) => {
-              const playerCount = index + 1;
-              return (
-                <FormControlLabel
-                  key={playerCount}
-                  control={
-                    <Checkbox
-                      value={playerCount}
-                      checked={players.includes(playerCount)}
-                      onChange={handleCheckboxChange}
-                    />
-                  }
-                  label={playerCount}
-                />
-              );
-            })}
+            <ButtonGroup variant="contained" aria-label="Basic button group">
+              {[...Array(7)].map((_, index) => {
+                const playerCount = index + 1;
+                return (
+                  <Button key={playerCount} onClick={() => generateBoardgamePDF(playerCount)}>
+                    {playerCount}
+                  </Button>
+                );
+              })}
+            </ButtonGroup>
           </FormGroup>
-          <Box mt={2}>
-            <h4>Selected Players: {players.join(", ")}</h4>
-          </Box>
-          <Button onClick={handleSubmit}>Generate</Button>
         </Box>
       </Modal>
     </CardContainer>
