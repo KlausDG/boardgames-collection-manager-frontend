@@ -15,3 +15,9 @@ export type MonetaryReportData = {
   [ReportKeys.Expansions]: MonetaryReportDataFields;
   [ReportKeys.Condensed]: MonetaryReportDataFields;
 };
+
+export type FreeGamesReportData = {
+  [ReportKeys.Standalones]: number;
+  [ReportKeys.Expansions]: number;
+  [ReportKeys.Condensed]: number;
+};

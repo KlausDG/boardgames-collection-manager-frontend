@@ -1,16 +1,20 @@
 import React from "react";
 
-import { moneyFormatter } from "@/utils/helpers";
 import { Box, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 
-import { MonetaryReportDataFields } from "../../types";
-
-type ReportCardProps = {
+type ReportCardProps<T> = {
   title: string;
-  data: MonetaryReportDataFields;
+  headers: Array<string>;
+  data: T;
+  dataFormatter?: (value: number) => string | number;
 };
 
-export const ReportCard = ({ title, data }: ReportCardProps) => {
+export const ReportCard = <T extends Record<string, number>>({
+  title,
+  headers,
+  data,
+  dataFormatter = (value) => value,
+}: ReportCardProps<T>) => {
   return (
     <Paper elevation={4}>
       <Box sx={{ padding: "16px 24px" }}>
@@ -18,14 +22,15 @@ export const ReportCard = ({ title, data }: ReportCardProps) => {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Sum</TableCell>
-              <TableCell>Avg</TableCell>
+              {headers.map((header) => (
+                <TableCell>{header}</TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
             <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
               {Object.values(data).map((value, index) => (
-                <TableCell key={index}>{moneyFormatter(value)}</TableCell>
+                <TableCell key={index}>{dataFormatter(value)}</TableCell>
               ))}
             </TableRow>
           </TableBody>

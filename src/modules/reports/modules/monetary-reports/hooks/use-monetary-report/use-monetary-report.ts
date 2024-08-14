@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { monetaryReportDto } from "../../dto";
+import { freeGamesDto, monetaryReportDto } from "../../dto";
 import { fetchMonetaryReport } from "../../repository";
 import { ReportKeys } from "../../types";
 import { MonetaryReport } from "./use-monetary-report.types";
@@ -12,32 +12,15 @@ export const useMonetaryReport = () => {
       try {
         const apiResponse = await fetchMonetaryReport();
 
-        const data = monetaryReportDto(apiResponse);
-
-        const reportKeys = data ? (Object.keys(data).filter((key) => key !== "free") as ReportKeys[]) : [];
-        const free = data?.free || 0;
-
-        const dataFallback = { sum: 0, avg: 0 };
-
-        const monetaryReportData = data
-          ? {
-              standalones: data.standalones || dataFallback,
-              expansions: data.expansions || dataFallback,
-              condensed: data.condensed || dataFallback,
-            }
-          : {
-              standalones: dataFallback,
-              expansions: dataFallback,
-              condensed: dataFallback,
-            };
+        const monetaryReportData = monetaryReportDto(apiResponse);
 
         return {
-          reportKeys,
-          free,
+          reportKeys: Object.keys(monetaryReportData) as ReportKeys[],
+          free: freeGamesDto(apiResponse?.free),
           monetaryReportData,
         };
       } catch (error) {
-        console.error("Error fetching monetary report:", error);
+        console.error("Error fetching monetary report: ", error);
         throw error;
       }
     },

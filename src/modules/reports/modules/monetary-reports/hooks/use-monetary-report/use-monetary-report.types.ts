@@ -1,7 +1,7 @@
-import { MonetaryReportData, ReportKeys } from "../../types";
+import { FreeGamesReportData, MonetaryReportData, ReportKeys } from "../../types";
 
 export type MonetaryReport = {
   reportKeys: ReportKeys[];
-  free: number;
+  free: FreeGamesReportData;
   monetaryReportData: MonetaryReportData;
 };

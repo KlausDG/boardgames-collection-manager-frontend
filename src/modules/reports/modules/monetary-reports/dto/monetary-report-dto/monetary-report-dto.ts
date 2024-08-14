@@ -1,14 +1,26 @@
 import type { MonetaryCategoryType, MonetaryReportResponse } from "../../repository";
+import { FreeGamesReportData } from "../../types";
 
 export const monetaryReportDto = (data: MonetaryReportResponse) => {
-  const { standalones, expansions, condensed, free } = data;
+  const { standalones, expansions, condensed } = data;
+
+  const dataFallback = { sum: 0, avg: 0 };
 
   return {
-    standalones: formatCategoryData(standalones),
-    expansions: formatCategoryData(expansions),
-    condensed: formatCategoryData(condensed),
-    free,
+    standalones: formatCategoryData(standalones) || dataFallback,
+    expansions: formatCategoryData(expansions) || dataFallback,
+    condensed: formatCategoryData(condensed) || dataFallback,
   };
+};
+
+export const freeGamesDto = (data: FreeGamesReportData) => {
+  return (
+    data || {
+      standalones: 0,
+      expansions: 0,
+      condensed: 0,
+    }
+  );
 };
 
 const formatCategoryData = (data: MonetaryCategoryType) => {

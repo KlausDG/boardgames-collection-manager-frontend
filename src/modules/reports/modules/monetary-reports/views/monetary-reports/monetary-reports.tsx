@@ -1,4 +1,5 @@
-import { CardContainer, KeyValue } from "@/components";
+import { CardContainer } from "@/components";
+import { moneyFormatter } from "@/utils/helpers";
 import { Box, Stack, Typography } from "@mui/material";
 
 import { ErrorCard, LoadingCard, ReportCard } from "../../components";
@@ -26,9 +27,15 @@ export const MonetaryReports = () => {
 
         <Stack direction="row" spacing={2}>
           {reportKeys.map((key) => (
-            <ReportCard key={key} title={objMapper[key]} data={monetaryReportData[key]} />
+            <ReportCard
+              key={key}
+              title={objMapper[key]}
+              headers={["Total", "Average"]}
+              data={monetaryReportData[key]}
+              dataFormatter={moneyFormatter}
+            />
           ))}
-          <KeyValue title="Free Games" data={free} />
+          <ReportCard title="Free Games" headers={Object.values(objMapper)} data={free} />
         </Stack>
       </Box>
     </CardContainer>

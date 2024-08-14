@@ -1,3 +1,5 @@
+import { FreeGamesReportData } from "../../types";
+
 type InnerMonetaryType = {
   purchasedPrice: number;
 };
@@ -11,7 +13,7 @@ export type MonetaryReportResponse = {
   standalones: MonetaryCategoryType;
   expansions: MonetaryCategoryType;
   condensed: MonetaryCategoryType;
-  free: number;
+  free: FreeGamesReportData;
 };
 
 export const fetchMonetaryReport = async () => {
