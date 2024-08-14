@@ -1,1 +1,1 @@
-export * from "./views";
+export * from "./modules/monetary-reports";

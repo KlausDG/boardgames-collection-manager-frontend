@@ -5,10 +5,11 @@ import { CardContainer } from "@/components";
 import { Box, Skeleton, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 
 import { InfoCard } from "../../components";
-import { useWeightReport } from "../../hooks";
+import { useMonetaryReport, useWeightReport } from "../../hooks";
 
 export const CollectionReports = () => {
   const { data } = useWeightReport();
+  const { data: monetaryReportData } = useMonetaryReport();
 
   return (
     <CardContainer>
@@ -46,6 +47,15 @@ export const CollectionReports = () => {
           )}
         </Box>
       </Stack>
+
+      <Box>
+        <Typography variant="h6">Monetary</Typography>
+        <Stack direction="row" spacing={2}>
+          <InfoCard title="Min" data={data?.min} shouldFormatData />
+          <InfoCard title="Max" data={data?.max} shouldFormatData />
+          <InfoCard title="Avg" data={data?.avg} shouldFormatData />
+        </Stack>
+      </Box>
     </CardContainer>
   );
 };
