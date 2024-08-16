@@ -1,8 +1,9 @@
 import { CardContainer } from "@/components";
+import { ErrorCard, LoadingCard } from "@/modules/reports/components";
 import { moneyFormatter } from "@/utils/helpers";
 import { Box, Stack, Typography } from "@mui/material";
 
-import { ErrorCard, LoadingCard, ReportCard } from "../../components";
+import { ReportCard } from "../../components";
 import { useMonetaryReport } from "../../hooks";
 import { ReportKeys } from "../../types";
 
