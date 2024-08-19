@@ -9,12 +9,12 @@ export const fetchBoardgames = async (filters?: Array<BoardgameFilter>) => {
       isLinked,
     };
     return acc;
-  }, {} as any);
+  }, {} as Record<keyof Boardgame, any>);
 
-  const serializeFilters = (filters: any) => {
+  const serializeFilters = (filters: typeof formattedFilters) => {
     return Object.keys(filters)
       .map((key) => {
-        const filter = filters[key];
+        const filter = filters[key as keyof Boardgame];
         return `${encodeURIComponent(key)}=${encodeURIComponent(filter.value)},${encodeURIComponent(filter.isLinked)}`;
       })
       .join("&");
