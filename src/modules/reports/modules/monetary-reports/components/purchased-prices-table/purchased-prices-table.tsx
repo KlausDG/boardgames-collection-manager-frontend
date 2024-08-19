@@ -1,22 +1,24 @@
 import React from "react";
 
-import { CardContainer } from "@/components";
-import { useFetchBoardgames } from "@/modules/boardgames/boardgames-table-module/hooks";
-import { Stack, Typography } from "@mui/material";
+import { Paper, Stack, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
-import { boardgamePricesTableDto, columns } from "../../dto";
+import { columns, purchasedPricesDto } from "../../dto";
 
-export const BoardgamePricesTable = () => {
-  const { data: boardgames, isLoading } = useFetchBoardgames();
+type PurchasedPricesTable = {
+  title: string;
+  data: ReturnType<typeof purchasedPricesDto>;
+  isLoading: boolean;
+};
 
+export const PurchasedPricesTable = ({ title, data, isLoading }: PurchasedPricesTable) => {
   return (
-    <CardContainer sx={{ padding: "24px" }}>
+    <Paper elevation={4} sx={{ padding: "16px 24px" }}>
       <Stack spacing={1}>
-        <Typography variant="h6">Boardgame Purchased Prices</Typography>
+        <Typography>{title}</Typography>
         <DataGrid
           columns={columns}
-          rows={boardgamePricesTableDto(boardgames)}
+          rows={data}
           density="compact"
           disableColumnResize
           autoHeight
@@ -32,6 +34,6 @@ export const BoardgamePricesTable = () => {
           pageSizeOptions={[10]}
         />
       </Stack>
-    </CardContainer>
+    </Paper>
   );
 };

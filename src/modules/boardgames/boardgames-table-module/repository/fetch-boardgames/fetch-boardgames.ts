@@ -2,19 +2,27 @@ import { Boardgame } from "@/interfaces";
 
 import { BoardgameFilter } from "../../types";
 
-export const fetchBoardgames = async (filter?: BoardgameFilter) => {
-  let qs = "";
-  if (filter) {
-    qs = Object.keys(filter)
+export const fetchBoardgames = async (filters?: Array<BoardgameFilter>) => {
+  const formattedFilters = (filters || []).reduce((acc, { key, value, isLinked }) => {
+    acc[key] = {
+      value,
+      isLinked,
+    };
+    return acc;
+  }, {} as any);
+
+  const serializeFilters = (filters: any) => {
+    return Object.keys(filters)
       .map((key) => {
-        const value = filter[key as keyof BoardgameFilter];
-        return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+        const filter = filters[key];
+        return `${encodeURIComponent(key)}=${encodeURIComponent(filter.value)},${encodeURIComponent(filter.isLinked)}`;
       })
       .join("&");
-  }
-  console.log(qs);
+  };
 
-  const response = await fetch(`http://localhost:3000/boardgames?${qs}`);
+  const queryString = serializeFilters(formattedFilters);
+
+  const response = await fetch(`http://localhost:3000/boardgames?${queryString}`);
 
   const jsonResponse = await response.json();
 
