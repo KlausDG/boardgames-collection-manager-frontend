@@ -15,7 +15,7 @@ type BoardgamesTableProps = {
 };
 
 export const BoardgamesTable = ({ title = "Boardgames", filter }: BoardgamesTableProps) => {
-  const { data: boardgames, isLoading } = useFetchBoardgames(filter);
+  const { data: boardgames, isLoading } = useFetchBoardgames({ filters: filter ? [filter] : [] });
   const { modal } = useBoardgameDetails();
 
   return (

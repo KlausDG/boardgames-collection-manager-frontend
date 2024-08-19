@@ -6,17 +6,17 @@ const columns = [
   { field: "purchasedPrice", headerName: "Purchased Price", width: 200 },
 ];
 
-const boardgamePricesTableDto = (boardgames: Array<Boardgame> | undefined) => {
+const purchasedPricesDto = (boardgames: Array<Boardgame> | undefined) => {
   if (!boardgames) return [];
   return boardgames.map((boardgame) => format(boardgame));
 };
 
 const format = (data: Boardgame) => {
   return {
-    id: data.name,
+    id: data.id,
     name: data.name,
     purchasedPrice: moneyFormatter(data.purchasedPrice),
   };
 };
 
-export { boardgamePricesTableDto, columns };
+export { columns, purchasedPricesDto };

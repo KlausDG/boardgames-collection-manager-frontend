@@ -1,5 +1,7 @@
+import { Boardgame } from "@/interfaces";
+
 export type BoardgameFilter = {
-  key: string;
-  value: string;
+  key: keyof Boardgame;
+  value: string | boolean;
   isLinked: boolean;
 };
