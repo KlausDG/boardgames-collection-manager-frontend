@@ -7,6 +7,7 @@ export type Boardgame = {
   thumbnail: string;
   description: string;
   yearPublished: number;
+  category: string;
   language: string;
   minPlayers: number;
   maxPlayers: number;
@@ -18,7 +19,7 @@ export type Boardgame = {
   bggLink: string;
   bggId: number;
   inCollection: boolean;
-  purchasedPrice: number | null;
+  purchasedPrice: number;
   acquisitionDate: Date;
   designers: Array<BaseFields>;
   mechanics: Mechanics;
